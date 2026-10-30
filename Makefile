@@ -1,12 +1,11 @@
 SHELL := /bin/bash
-PYTHON ?= python
+UV ?= uv
 VENV ?= .venv
 
 .PHONY: setup data features train gnn serve test
 setup:
-	$(PYTHON) -m venv $(VENV)
-	$(VENV)/bin/python -m pip install --upgrade pip==25.0.1
-	$(VENV)/bin/python -m pip install -r requirements.txt
+	$(UV) venv --python 3.11 $(VENV)
+	$(UV) pip install --python $(VENV)/bin/python -r requirements.txt
 
 data:
 	$(VENV)/bin/python -m src.data.prepare

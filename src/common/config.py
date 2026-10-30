@@ -1,7 +1,10 @@
 """Shared project paths and constants."""
 from pathlib import Path
+import os
 
 ROOT = Path(__file__).resolve().parents[2]
+KAFKA_BOOTSTRAP_HOST = os.getenv("KAFKA_BOOTSTRAP_HOST", "localhost:9092")
+KAFKA_BOOTSTRAP_DOCKER = os.getenv("KAFKA_BOOTSTRAP_DOCKER", "kafka:29092")
 DATA_DIR = ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"

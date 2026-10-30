@@ -24,16 +24,15 @@ source .venv/bin/activate
 python -c "import xgboost, torch, torch_geometric, feast, mlflow, evidently, fastapi, confluent_kafka"
 ```
 
-## Acceptance checks
+## Phase 0.5 verification status (2026-10-30)
 
-- `make setup`: **UNVERIFIED** here. The current execution environment is Windows PowerShell rather than WSL2 Ubuntu, and this check requires network package downloads. Run the commands above in WSL2; successful completion should return exit code 0, with no traceback, and print no output for the import-only command.
-- Docker Compose / Kafka / MLflow startup: **UNVERIFIED**. Run `docker compose -f docker/docker-compose.yml up -d`; `docker compose -f docker/docker-compose.yml ps` should show both `kafka` and `mlflow` as running.
-- Minikube: outside Phase 0 runtime acceptance; the requested startup command is documented in `docs/windows_setup.md`.
-- No data or model metrics exist in this phase, so no result values are claimed.
-- Pytest: no Phase 0 behavioral tests exist yet; run `make test` when the virtualenv is installed.
+- Working directory: `/home/arjun/fraud-platform`.
+- `uname -a`: `Linux ARJUN 6.18.54.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Tue Oct 6 19:13:07 UTC 2026 x86_64 GNU/Linux`.
+- `uv venv --python 3.11 .venv` succeeded and selected CPython 3.11.18.
+- `UV_CACHE_DIR=/tmp/fraud-platform-uv-cache make setup` did not complete: uv could not resolve DNS for `download.pytorch.org` while fetching packages. The import check and `pip check` are therefore **UNVERIFIED**; the requirements remain pinned.
+- `docker version` reports Docker client 29.9.2, but cannot access `unix:///var/run/docker.sock` (`permission denied`). Compose startup, Kafka round trip, and MLflow endpoint/experiment checks are **UNVERIFIED**.
+- Kafka Compose configuration now advertises `kafka:29092` internally and `localhost:9092` externally; this configuration has not been runtime-verified because Docker socket access is blocked.
+- Minikube is outside this phase's runtime checks. No data or model metrics are claimed.
 
-## Known issues to resolve before the next phase
-
-- Validate the Compose Kafka environment against the selected Apache Kafka image and run its health/connectivity check in Docker. Docker is unavailable in the current shell.
-- Verify Python dependency resolution and import success from WSL2. Dependencies are pinned but have not been installed in this environment.
+To finish the blocked checks from a terminal with package network access and Docker access, run `UV_CACHE_DIR=/tmp/fraud-platform-uv-cache make setup`, then the import and dependency checks in the run instructions; start services with `docker compose -f docker/docker-compose.yml up -d`.
 
