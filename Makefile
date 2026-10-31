@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features feature-store train gnn serve test
+.PHONY: setup data features feature-store train train-xgb train-xgb-local gnn serve test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --python $(VENV)/bin/python -r requirements.txt
@@ -21,6 +21,12 @@ feature-store:
 
 train:
 	$(VENV)/bin/python -m src.models.train_xgb
+
+train-xgb:
+	$(VENV)/bin/python -m src.models.train_xgb --tracking-uri http://localhost:5000
+
+train-xgb-local:
+	$(VENV)/bin/python -m src.models.train_xgb --tracking-uri file:./mlruns_local
 
 gnn:
 	$(VENV)/bin/python -m src.models.train_gnn

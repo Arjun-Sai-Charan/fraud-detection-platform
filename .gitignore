@@ -13,6 +13,7 @@ data/processed/*
 results/*
 !results/.gitkeep
 mlruns/
+mlruns_local/
 mlartifacts/
 *.db
 *.sqlite*
