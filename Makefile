@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features train gnn serve test
+.PHONY: setup data features feature-store train gnn serve test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --python $(VENV)/bin/python -r requirements.txt
@@ -12,6 +12,12 @@ data:
 
 features:
 	$(VENV)/bin/python -m src.features.build_features
+
+feature-store:
+	$(VENV)/bin/python -m src.features.build_features
+	cd src/feature_repo && ../../$(VENV)/bin/feast apply
+	cd src/feature_repo && ../../$(VENV)/bin/feast materialize 2017-11-30T00:00:00 2018-01-06T00:00:00
+	$(VENV)/bin/python -m src.features.feature_parity
 
 train:
 	$(VENV)/bin/python -m src.models.train_xgb
