@@ -24,15 +24,7 @@ source .venv/bin/activate
 python -c "import xgboost, torch, torch_geometric, feast, mlflow, evidently, fastapi, confluent_kafka"
 ```
 
-## Phase 0.5 verification status (2026-10-30)
+## Phase 0.5 verification status
 
-- Working directory: `/home/arjun/fraud-platform`.
-- `uname -a`: `Linux ARJUN 6.18.54.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Tue Oct 6 19:13:07 UTC 2026 x86_64 GNU/Linux`.
-- `uv venv --python 3.11 .venv` succeeded and selected CPython 3.11.18.
-- `UV_CACHE_DIR=/tmp/fraud-platform-uv-cache make setup` did not complete: uv could not resolve DNS for `download.pytorch.org` while fetching packages. The import check and `pip check` are therefore **UNVERIFIED**; the requirements remain pinned.
-- `docker version` reports Docker client 29.9.2, but cannot access `unix:///var/run/docker.sock` (`permission denied`). Compose startup, Kafka round trip, and MLflow endpoint/experiment checks are **UNVERIFIED**.
-- Kafka Compose configuration now advertises `kafka:29092` internally and `localhost:9092` externally; this configuration has not been runtime-verified because Docker socket access is blocked.
-- Minikube is outside this phase's runtime checks. No data or model metrics are claimed.
-
-To finish the blocked checks from a terminal with package network access and Docker access, run `UV_CACHE_DIR=/tmp/fraud-platform-uv-cache make setup`, then the import and dependency checks in the run instructions; start services with `docker compose -f docker/docker-compose.yml up -d`.
+**VERIFIED by the user in WSL2 (2026-10-31):** the Python 3.11 virtual environment at `.venv` installs cleanly, required imports succeed, `pip check` is clean, the Kafka produce/consume round trip works, and MLflow responds. The user confirmed the pinned versions `pyarrow==18.1.0`, `scikit-learn==1.5.2`, and `sqlalchemy==2.0.36`; these pins are retained unchanged.
 
