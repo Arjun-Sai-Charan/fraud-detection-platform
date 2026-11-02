@@ -23,6 +23,7 @@ source = FileSource(
 
 _fields = [
     Field(name="uid", dtype=String),
+    Field(name="transaction_dt", dtype=Int64),
     Field(name="TransactionAmt", dtype=Float64),
     Field(name="txn_count_last_1h", dtype=Int64),
     Field(name="txn_count_last_24h", dtype=Int64),

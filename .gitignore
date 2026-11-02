@@ -15,6 +15,7 @@ results/*
 mlruns/
 mlruns_local/
 mlartifacts/
+artifacts/
 *.db
 *.sqlite*
 *.log
