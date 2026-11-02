@@ -7,6 +7,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+import mlflow
 from mlflow.tracking import MlflowClient
 
 from src.common.config import XGB_ARTIFACT_DIR
@@ -73,6 +74,7 @@ def main() -> None:
     parser.add_argument("--version")
     parser.add_argument("--output-dir", type=Path, default=XGB_ARTIFACT_DIR)
     args = parser.parse_args()
+    mlflow.set_tracking_uri(args.tracking_uri)
     result = export_registered_model(args.tracking_uri, args.model_name, args.version, args.output_dir)
     print(json.dumps(result, indent=2))
 

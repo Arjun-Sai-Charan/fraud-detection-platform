@@ -155,6 +155,7 @@ def test_consumer_scores_persists_and_publishes_with_mock_kafka(tmp_path):
 
 def test_export_registered_model_copies_local_assets(tmp_path, monkeypatch):
     from scripts import export_model
+    import sys
 
     class Version:
         name = "fraud-xgb"
@@ -179,9 +180,12 @@ def test_export_registered_model_copies_local_assets(tmp_path, monkeypatch):
             return str(model_dir)
 
     monkeypatch.setattr(export_model, "MlflowClient", FakeClient)
+    tracking_uris = []
+    monkeypatch.setattr(export_model.mlflow, "set_tracking_uri", tracking_uris.append)
     out = tmp_path / "artifacts" / "xgb"
-    result = export_model.export_registered_model("file:./mock", output_dir=out)
-    assert result["version"] == 7
+    monkeypatch.setattr(sys, "argv", ["export_model", "--tracking-uri", "file:./mock", "--output-dir", str(out)])
+    export_model.main()
+    assert tracking_uris == ["file:./mock"]
     assert (out / "model" / "MLmodel").is_file()
     assert json.loads((out / "threshold.json").read_text())["threshold"] == 0.5
     assert json.loads((out / "feature_list.json").read_text())["features"] == ["amount"]

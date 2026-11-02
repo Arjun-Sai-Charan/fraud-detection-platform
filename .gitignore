@@ -11,6 +11,10 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 results/*
+!results/*.json
+!results/*.png
+!results/*.csv
+!results/*.html
 !results/.gitkeep
 mlruns/
 mlruns_local/

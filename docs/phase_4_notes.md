@@ -10,14 +10,14 @@ To serve directly from a registry instead of exporting local files, run `make se
 
 The producer replays only the Phase 1 test split, sorted by event timestamp and then transaction ID. `--rate` controls transactions per second and `--limit` caps the replay. The consumer reads `transactions`, calls the same scorer, writes to SQLite, and publishes one response per input transaction to `fraud-scores`. Host commands use `localhost:9092`; `--docker` selects `kafka:29092` for processes on the Compose network.
 
-The Feast view now includes `transaction_dt`, which is one of the 53 registered XGBoost inputs. Apply and materialize the updated view before serving so the online store contains that feature.
+The Feast view includes `transaction_dt` as time metadata. It is excluded from the XGBoost inputs; the current registered model uses 52 features. Apply and materialize the Feast view before serving so the online store has the current schema.
 
 ## Local checks
 
-- Exported local registered model `fraud-xgb` version 1 to `artifacts/xgb/`; the saved model has 53 inputs and serving threshold `0.06467334926128387`. Loaded it with the default scorer using a mocked Feast response.
+- The previous 53-feature export and benchmark are superseded. Exported local registered model `fraud-xgb` version 2 to `artifacts/xgb/`; it has 52 inputs and serving threshold `0.1192927360534668`. Loaded it with the default scorer using a mocked Feast response.
 - Applied the updated Feast view and materialized 150,000 rows to the local SQLite online store.
-- Full test suite: `.venv/bin/python -m pytest -q` completed with **15 passed** (31 dependency deprecation warnings). TestClient/API, SQLite feedback round trip, scorer, Kafka producer/consumer helpers, export helper, and producer ordering use mocks and temporary local SQLite files.
-- `scripts/benchmark_latency.py` scored 5,000 chronological test transactions. The measured p50 was **32.0966 ms**, p95 **55.5740 ms**, p99 **85.3416 ms**, throughput **27.8865 transactions/sec**, elapsed **179.2985 sec**. The full values are saved in `results/latency.json`. This measures Feast online lookup plus model inference; it does not measure Kafka.
+- Full test suite: `.venv/bin/python -m pytest -q` completed with **17 passed** (31 dependency deprecation warnings). TestClient/API, SQLite feedback round trip, scorer, Kafka producer/consumer helpers, export helper, producer ordering, and Phase 3's unique/schema feature checks use mocks and temporary local SQLite files.
+- After retraining, `scripts/benchmark_latency.py` scored 5,000 chronological test transactions. The measured p50 was **32.1260 ms**, p95 **66.6471 ms**, p99 **86.9035 ms**, throughput **27.2596 transactions/sec**, elapsed **183.4213 sec**. The full values are saved in `results/latency.json`. This measures Feast online lookup plus model inference; it does not measure Kafka.
 - **UNVERIFIED: Kafka integration.** The sandbox cannot connect to Kafka at `localhost:9092`; no Kafka broker or network round trip is claimed here.
 
 ## Kafka integration commands

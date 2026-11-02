@@ -31,7 +31,7 @@ FEATURES_PATH = PROCESSED_DIR / "features.parquet"
 FEATURE_REPO = Path(__file__).resolve().parents[1] / "feature_repo"
 METRICS_PATH = RESULTS_DIR / "xgb_metrics.json"
 PR_CURVE_PATH = RESULTS_DIR / "xgb_pr_curve.png"
-EXCLUDED_COLUMNS = frozenset({"transaction_id", "event_timestamp", "uid", "isFraud", "split"})
+EXCLUDED_COLUMNS = frozenset({"transaction_id", "event_timestamp", "transaction_dt", "uid", "isFraud", "split"})
 ALERT_BUDGETS = (0.01, 0.02, 0.03, 0.05)
 TRACKING_EXPERIMENT = "fraud_xgboost_phase3"
 MODEL_NAME = "fraud-xgb"
@@ -39,6 +39,7 @@ MODEL_NAME = "fraud-xgb"
 
 def get_model_features(frame: pd.DataFrame) -> list[str]:
     """Choose numeric model inputs and enforce the requested exclusions."""
+    _validate_model_feature_names(list(frame.columns))
     excluded = EXCLUDED_COLUMNS.intersection(frame.columns)
     features = [
         column
@@ -49,7 +50,25 @@ def get_model_features(frame: pd.DataFrame) -> list[str]:
         raise ValueError("No numeric model features remain after exclusions")
     if set(features).intersection(EXCLUDED_COLUMNS):
         raise AssertionError("Feature selection included an excluded ID or label column")
+    _validate_model_feature_names(features)
     return sorted(features)
+
+
+def _validate_model_feature_names(feature_names: list[str], feast_online_fields: set[str] | None = None) -> None:
+    """Enforce unique model columns and (when provided) the Feast online schema."""
+    duplicates = sorted({name for name in feature_names if feature_names.count(name) > 1})
+    if duplicates:
+        raise ValueError(f"Model feature names must be unique; duplicates: {duplicates}")
+    if feast_online_fields is not None:
+        missing = sorted(set(feature_names).difference(feast_online_fields))
+        if missing:
+            raise ValueError(f"Model features are missing from the Feast online schema: {missing}")
+
+
+def _feast_online_field_names() -> set[str]:
+    store = FeatureStore(repo_path=str(FEATURE_REPO))
+    view = store.get_feature_view("transaction_features")
+    return {field.name for field in view.schema}
 
 
 def top_budget_mask(scores: np.ndarray, budget: float, transaction_ids: np.ndarray | None = None) -> tuple[np.ndarray, float]:
@@ -117,7 +136,7 @@ def _fetch_from_feast(features_path: Path) -> pd.DataFrame:
     ).to_df()
     labels_and_metadata = pd.read_parquet(
         features_path,
-        columns=["transaction_id", "transaction_dt", "isFraud", "split"],
+        columns=["transaction_id", "isFraud", "split"],
     )
     result = historical.merge(labels_and_metadata, on="transaction_id", how="left", validate="one_to_one")
     if len(result) != len(source) or result["isFraud"].isna().any() or result["split"].isna().any():
@@ -354,6 +373,7 @@ def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEA
 
     frame, feature_source, fallback_reason, retrieval_seconds = load_training_data(features_path)
     feature_names = get_model_features(frame)
+    _validate_model_feature_names(feature_names, _feast_online_field_names())
     splits = _split_arrays(frame, feature_names)
     base_rates = {name: float(np.mean(y)) for name, (_, y, _) in splits.items()}
     train_negatives = int(np.sum(splits["train"][1] == 0))

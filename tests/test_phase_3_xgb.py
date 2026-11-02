@@ -1,7 +1,14 @@
 import numpy as np
 import pandas as pd
 
-from src.models.train_xgb import EXCLUDED_COLUMNS, get_model_features, top_budget_mask
+import pytest
+
+from src.models.train_xgb import (
+    EXCLUDED_COLUMNS,
+    _validate_model_feature_names,
+    get_model_features,
+    top_budget_mask,
+)
 
 
 def test_model_feature_list_excludes_ids_timestamps_labels_and_split():
@@ -14,11 +21,23 @@ def test_model_feature_list_excludes_ids_timestamps_labels_and_split():
             "split": ["train", "test"],
             "TransactionAmt": [10.0, 20.0],
             "count_feature": [1, 2],
+            "transaction_dt": [123, 456],
         }
     )
     features = get_model_features(frame)
     assert features == ["TransactionAmt", "count_feature"]
     assert set(features).isdisjoint(EXCLUDED_COLUMNS)
+    assert "transaction_dt" not in features
+
+
+def test_model_feature_names_must_be_unique():
+    with pytest.raises(ValueError, match="must be unique"):
+        _validate_model_feature_names(["TransactionAmt", "TransactionAmt"])
+
+
+def test_saved_model_features_must_exist_in_feast_online_schema():
+    with pytest.raises(ValueError, match="missing from the Feast online schema"):
+        _validate_model_feature_names(["TransactionAmt", "missing_feature"], {"TransactionAmt"})
 
 
 def test_top_budget_threshold_flags_expected_share_and_breaks_score_ties():
