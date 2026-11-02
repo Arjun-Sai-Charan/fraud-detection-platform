@@ -14,7 +14,7 @@ import pandas as pd
 from feast import FeatureStore
 from mlflow.tracking import MlflowClient
 
-from src.common.config import FEATURE_REPO_DIR, XGB_ARTIFACT_DIR
+from src.common.config import FEATURE_REPO_DIR, GNN_ARTIFACT_DIR, XGB_ARTIFACT_DIR
 
 
 class FraudScorer:
@@ -31,6 +31,7 @@ class FraudScorer:
         feature_list: list[str] | None = None,
         threshold: dict[str, Any] | None = None,
         feature_repo: Path = FEATURE_REPO_DIR,
+        gnn_artifact_dir: Path = GNN_ARTIFACT_DIR,
     ) -> None:
         if model_source not in {"local", "registry"}:
             raise ValueError("model_source must be 'local' or 'registry'")
@@ -40,12 +41,38 @@ class FraudScorer:
         self.model_name = model_name
         self.model_version = model_version
         self.feature_repo = Path(feature_repo)
+        self.gnn_artifact_dir = Path(gnn_artifact_dir)
         self.model = model
         self.feature_store = feature_store
         self.feature_list = feature_list
         self.threshold = threshold
         self._injected_model = model is not None
         self._injected_store = feature_store is not None
+        self.gnn_scores: dict[int, float] = {}
+        self.rings: dict[int, tuple[str | None, int | None]] = {}
+        self.blend_config: dict[str, Any] | None = None
+        self._gnn_artifacts_loaded = False
+
+    def _load_gnn_artifacts(self) -> None:
+        if self._gnn_artifacts_loaded:
+            return
+        scores_path = self.gnn_artifact_dir / "gnn_scores.parquet"
+        rings_path = self.gnn_artifact_dir / "rings.parquet"
+        config_path = self.gnn_artifact_dir / "blend_config.json"
+        if scores_path.is_file() and config_path.is_file():
+            scores = pd.read_parquet(scores_path, columns=["transaction_id", "gnn_score"])
+            self.gnn_scores = {
+                int(row.transaction_id): float(row.gnn_score)
+                for row in scores.itertuples(index=False)
+            }
+            self.blend_config = json.loads(config_path.read_text(encoding="utf-8"))
+        if rings_path.is_file():
+            rings = pd.read_parquet(rings_path, columns=["transaction_id", "ring_id", "ring_size"])
+            self.rings = {
+                int(row.transaction_id): (row.ring_id, None if pd.isna(row.ring_size) else int(row.ring_size))
+                for row in rings.itertuples(index=False)
+            }
+        self._gnn_artifacts_loaded = True
 
     def _load_registry_artifacts(self) -> tuple[Any, list[str], dict[str, Any]]:
         mlflow.set_tracking_uri(self.tracking_uri)
@@ -80,6 +107,7 @@ class FraudScorer:
                 self.feature_list = json.loads(feature_path.read_text(encoding="utf-8"))["features"]
         if self.feature_store is None:
             self.feature_store = FeatureStore(repo_path=str(self.feature_repo))
+        self._load_gnn_artifacts()
 
     @staticmethod
     def _online_feature_values(response: Any, feature_names: list[str]) -> dict[str, Any]:
@@ -115,18 +143,26 @@ class FraudScorer:
             score = float(self.model.predict_proba(row)[0, 1])
         else:
             score = float(np.asarray(self.model.predict(row)).reshape(-1)[0])
+        gnn_score = self.gnn_scores.get(int(transaction_id))
+        final_score = score
         cutoff = float(self.threshold["threshold"])
         tie_id = int(self.threshold.get("tie_break_transaction_id_max", -1))
-        is_alert = score > cutoff or (score == cutoff and int(transaction_id) <= tie_id)
+        if gnn_score is not None and self.blend_config is not None:
+            weight = float(self.blend_config["blend_weight_xgb"])
+            final_score = weight * score + (1.0 - weight) * gnn_score
+            cutoff = float(self.blend_config["threshold"])
+            tie_id = int(self.blend_config.get("tie_break_transaction_id_max", -1))
+        is_alert = final_score > cutoff or (final_score == cutoff and int(transaction_id) <= tie_id)
+        ring_id, ring_size = self.rings.get(int(transaction_id), (None, None))
         latency_ms = (time.perf_counter() - started) * 1000.0
         return {
             "transaction_id": int(transaction_id),
             "xgb_score": score,
             "alert": bool(is_alert),
-            "gnn_score": None,
-            "final_score": score,
-            "ring_id": None,
-            "ring_size": None,
+            "gnn_score": gnn_score,
+            "final_score": float(final_score),
+            "ring_id": ring_id,
+            "ring_size": ring_size,
             "latency_ms": float(latency_ms),
         }
 

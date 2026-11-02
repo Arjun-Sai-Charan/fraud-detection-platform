@@ -12,6 +12,7 @@ RESULTS_DIR = ROOT / "results"
 DOCS_DIR = ROOT / "docs"
 FEATURE_REPO_DIR = ROOT / "src" / "feature_repo"
 XGB_ARTIFACT_DIR = ROOT / "artifacts" / "xgb"
+GNN_ARTIFACT_DIR = ROOT / "artifacts" / "gnn"
 SERVING_DB_PATH = DATA_DIR / "serving.db"
 KAFKA_TRANSACTIONS_TOPIC = os.getenv("KAFKA_TRANSACTIONS_TOPIC", "transactions")
 KAFKA_FRAUD_SCORES_TOPIC = os.getenv("KAFKA_FRAUD_SCORES_TOPIC", "fraud-scores")

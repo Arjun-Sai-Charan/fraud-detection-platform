@@ -1,0 +1,523 @@
+{
+  "tracking_uri": "file:./mlruns_local",
+  "registered_model_name": "fraud-gnn",
+  "feature_count": 52,
+  "feature_list": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C14",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "D1",
+    "D10",
+    "D11",
+    "D12",
+    "D13",
+    "D14",
+    "D15",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8",
+    "D9",
+    "M1_encoded",
+    "M2_encoded",
+    "M3_encoded",
+    "M4_encoded",
+    "M5_encoded",
+    "M6_encoded",
+    "M7_encoded",
+    "M8_encoded",
+    "M9_encoded",
+    "P_emaildomain_encoded",
+    "ProductCD_encoded",
+    "R_emaildomain_encoded",
+    "TransactionAmt",
+    "amount_to_past_mean",
+    "card4_encoded",
+    "card6_encoded",
+    "device_change_vs_previous",
+    "is_first_txn_for_uid",
+    "location_change_vs_previous",
+    "txn_count_last_1h",
+    "txn_count_last_24h",
+    "uid_is_hub",
+    "uid_prior_txn_count"
+  ],
+  "feature_source": "Phase 2 features.parquet aligned to Phase 1 split parquets",
+  "pyg_lib_installed": false,
+  "torch_sparse_installed": false,
+  "training_mode": "full_batch_no_neighborloader",
+  "temporal_snapshots": {
+    "train_transactions": 90000,
+    "validation_snapshot_transactions": 120000,
+    "test_snapshot_transactions": 150000
+  },
+  "split_base_rates": {
+    "train": 0.026155555555555557,
+    "validation": 0.0172,
+    "test": 0.03666666666666667
+  },
+  "hub_cap": {
+    "selection": "99.5th percentile of TRAIN entity degree by type",
+    "by_entity_type": {
+      "uid": {
+        "degree_cap_from_train_percentile": 99,
+        "train_degree_percentile": 99.5,
+        "entity_nodes": 24084,
+        "hub_nodes_dropped": 187,
+        "edges_dropped_in_full_snapshot": 46898,
+        "remaining_edges_in_full_snapshot": 103102
+      },
+      "device": {
+        "degree_cap_from_train_percentile": 720,
+        "train_degree_percentile": 99.5,
+        "entity_nodes": 1095,
+        "hub_nodes_dropped": 6,
+        "edges_dropped_in_full_snapshot": 45307,
+        "remaining_edges_in_full_snapshot": 8378
+      },
+      "email_domain": {
+        "degree_cap_from_train_percentile": 32627,
+        "train_degree_percentile": 99.5,
+        "entity_nodes": 59,
+        "hub_nodes_dropped": 1,
+        "edges_dropped_in_full_snapshot": 55834,
+        "remaining_edges_in_full_snapshot": 71293
+      },
+      "addr1": {
+        "degree_cap_from_train_percentile": 6376,
+        "train_degree_percentile": 99.5,
+        "entity_nodes": 267,
+        "hub_nodes_dropped": 4,
+        "edges_dropped_in_full_snapshot": 43999,
+        "remaining_edges_in_full_snapshot": 89883
+      }
+    }
+  },
+  "train_normalization": {
+    "median": [
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      2.0,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      16.0,
+      28.0,
+      0.0,
+      0.0,
+      0.0,
+      49.0,
+      104.0,
+      8.0,
+      23.0,
+      10.0,
+      0.0,
+      0.0,
+      63.75,
+      0.6666659712791443,
+      1.0,
+      2.0,
+      2.0,
+      3.0,
+      2.0,
+      1.0,
+      2.0,
+      2.0,
+      2.0,
+      17.0,
+      4.0,
+      0.0,
+      75.0,
+      0.7747447935150138,
+      4.0,
+      3.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      6.0
+    ],
+    "mean": [
+      43.09866666666667,
+      28.50608888888889,
+      31.118733333333335,
+      23.989044444444446,
+      47.448455555555554,
+      17.597255555555556,
+      50.33807777777778,
+      0.013422222222222223,
+      19.983155555555555,
+      4.254477777777778,
+      24.09868888888889,
+      17.127433333333332,
+      27.813666666666666,
+      3.3750333333333336,
+      75.5167111111111,
+      86.80236666666667,
+      55.194944444444445,
+      4.888977777777778,
+      1.6284333333333334,
+      4.8492444444444445,
+      116.28284444444445,
+      130.52532222222223,
+      17.293511111111112,
+      80.10696666666666,
+      20.95232222222222,
+      7.847888888888889,
+      3.390522222222222,
+      87.67548003855414,
+      0.6467118804984623,
+      0.6786111111111112,
+      1.646488888888889,
+      1.6085333333333334,
+      1.972288888888889,
+      1.509011111111111,
+      1.1416666666666666,
+      1.6938333333333333,
+      1.7330777777777777,
+      1.8116444444444444,
+      19.535511111111113,
+      2.8166,
+      6.111255555555555,
+      130.15125493331192,
+      1.1280080963446575,
+      3.5786,
+      2.6528,
+      0.2729111111111111,
+      0.20577777777777778,
+      0.0,
+      0.47856666666666664,
+      5.056622222222222,
+      0.0016,
+      44.23118888888889
+    ],
+    "std": [
+      322.45163523365505,
+      241.13215608101336,
+      225.30876767522562,
+      220.61596827484044,
+      228.1006249415449,
+      106.4316107346947,
+      376.13043733815203,
+      0.1392753450124773,
+      162.57222731467434,
+      21.69183274247107,
+      163.27847859298166,
+      157.21886257600192,
+      240.20503337302475,
+      14.253140979334535,
+      137.33267754164385,
+      145.36285723410734,
+      94.62761182076311,
+      37.850660740720016,
+      22.107319913722407,
+      41.71646338323791,
+      154.48566966667576,
+      110.60610603448916,
+      42.08617252607972,
+      135.6291188513038,
+      51.196232111187484,
+      51.91443040646708,
+      31.09664707103601,
+      124.45139596116715,
+      0.14780526549835565,
+      0.46700971187689577,
+      0.5410965254710198,
+      0.615122809779799,
+      1.306483356567686,
+      0.7736686915732199,
+      0.8497826519497852,
+      0.7038827040856291,
+      0.6326200145737388,
+      0.44752401080489995,
+      18.047907390693453,
+      1.514715960172376,
+      12.435170104776656,
+      206.538911877353,
+      1.7725742157165865,
+      0.6788387437380179,
+      0.4765232231723092,
+      0.4454555382339005,
+      0.4042688263407041,
+      1.0,
+      1.2241398572055928,
+      12.227805042042434,
+      0.03996798718975038,
+      111.85961969524968
+    ]
+  },
+  "gnn_runs": {
+    "real_graph": {
+      "run_name": "real_graph",
+      "epochs_run": 8,
+      "best_epoch": 5,
+      "validation_pr_auc": 0.04388821786705017,
+      "training_seconds": 8.137286391007365,
+      "positive_weight": 37.23279524214104
+    },
+    "shuffled_edges": {
+      "run_name": "shuffled_edges",
+      "epochs_run": 8,
+      "best_epoch": 5,
+      "validation_pr_auc": 0.04472068969916076,
+      "training_seconds": 7.738588134001475,
+      "positive_weight": 37.23279524214104
+    }
+  },
+  "validation_blend_grid_pr_auc": {
+    "0.0": 0.04388821786705017,
+    "0.1": 0.0917996855577088,
+    "0.2": 0.19341578869777723,
+    "0.3": 0.2836186970924192,
+    "0.4": 0.32345535511834206,
+    "0.5": 0.34627445660951,
+    "0.6": 0.3643457097543998,
+    "0.7": 0.38134581843120996,
+    "0.8": 0.39787560071238043,
+    "0.9": 0.41034406643269056,
+    "1.0": 0.41721872734555976
+  },
+  "blend_weight_xgb": 1.0,
+  "blend_threshold": {
+    "threshold": 0.1192927360534668,
+    "alert_budget": 0.03,
+    "validation_alerts": 900,
+    "validation_rows": 30000,
+    "tie_break": "transaction_id ascending among scores equal to threshold",
+    "tie_break_transaction_id_max": 3077236
+  },
+  "test_models": {
+    "xgboost": {
+      "pr_auc": 0.5530590097963213,
+      "roc_auc": 0.8932203837684807,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.641617476940155,
+          "precision": 0.8966666666666666,
+          "recall": 0.24454545454545454
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.29044219851493835,
+          "precision": 0.755,
+          "recall": 0.4118181818181818
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.16988898813724518,
+          "precision": 0.6133333333333333,
+          "recall": 0.5018181818181818
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.09160745143890381,
+          "precision": 0.43733333333333335,
+          "recall": 0.5963636363636363
+        }
+      }
+    },
+    "gnn": {
+      "pr_auc": 0.1395482654738553,
+      "roc_auc": 0.7535516200062913,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.6033337712287903,
+          "precision": 0.26,
+          "recall": 0.07090909090909091
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.5676554441452026,
+          "precision": 0.20833333333333334,
+          "recall": 0.11363636363636363
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.5439406037330627,
+          "precision": 0.19777777777777777,
+          "recall": 0.1618181818181818
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.5043965578079224,
+          "precision": 0.174,
+          "recall": 0.23727272727272727
+        }
+      }
+    },
+    "blend": {
+      "pr_auc": 0.5530590097963213,
+      "roc_auc": 0.8932203837684807,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.641617476940155,
+          "precision": 0.8966666666666666,
+          "recall": 0.24454545454545454
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.29044219851493835,
+          "precision": 0.755,
+          "recall": 0.4118181818181818
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.16988898813724518,
+          "precision": 0.6133333333333333,
+          "recall": 0.5018181818181818
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.09160745143890381,
+          "precision": 0.43733333333333335,
+          "recall": 0.5963636363636363
+        }
+      }
+    },
+    "shuffled_edge_gnn": {
+      "pr_auc": 0.13434158414331512,
+      "roc_auc": 0.7501792702107581,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.5709921717643738,
+          "precision": 0.2733333333333333,
+          "recall": 0.07454545454545454
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.5405517816543579,
+          "precision": 0.24166666666666667,
+          "recall": 0.1318181818181818
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.5193104147911072,
+          "precision": 0.20444444444444446,
+          "recall": 0.16727272727272727
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.4815405011177063,
+          "precision": 0.17733333333333334,
+          "recall": 0.24181818181818182
+        }
+      }
+    }
+  },
+  "ring_summary": {
+    "flagged_test_transactions": 1184,
+    "transactions_assigned_to_multi_transaction_rings": 893,
+    "ring_count": 46
+  },
+  "temporal_caveat": "Within a validation/test snapshot, a transaction can receive feature-only messages from entity-sharing transactions later in that same split; labels are never node inputs, but offline scores may be slightly optimistic versus live scoring.",
+  "ring_caveat": "Ring components are assigned offline over flagged test transactions; streaming deployment would update components incrementally.",
+  "graph_derived_xgb_experiment": {
+    "feature_count": 57,
+    "extra_features": [
+      "uid_prior_degree",
+      "device_prior_degree",
+      "email_domain_prior_degree",
+      "addr1_prior_degree",
+      "device_prior_distinct_uids"
+    ],
+    "best_iteration": 393,
+    "validation": {
+      "pr_auc": 0.4281063614134649,
+      "roc_auc": 0.8835791176714949,
+      "base_rate": 0.0172,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.33709463477134705,
+          "precision": 0.6166666666666667,
+          "recall": 0.35852713178294576
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.13957946002483368,
+          "precision": 0.39166666666666666,
+          "recall": 0.45542635658914726
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.08819685131311417,
+          "precision": 0.30444444444444446,
+          "recall": 0.5310077519379846
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.05175803601741791,
+          "precision": 0.20266666666666666,
+          "recall": 0.5891472868217055
+        }
+      }
+    },
+    "test": {
+      "pr_auc": 0.5308604418838847,
+      "roc_auc": 0.8856216105693614,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "alerts": 300,
+          "threshold_score": 0.5933763384819031,
+          "precision": 0.9,
+          "recall": 0.24545454545454545
+        },
+        "2%": {
+          "alerts": 600,
+          "threshold_score": 0.2464834302663803,
+          "precision": 0.7316666666666667,
+          "recall": 0.3990909090909091
+        },
+        "3%": {
+          "alerts": 900,
+          "threshold_score": 0.13617964088916779,
+          "precision": 0.5822222222222222,
+          "recall": 0.4763636363636364
+        },
+        "5%": {
+          "alerts": 1500,
+          "threshold_score": 0.07436885684728622,
+          "precision": 0.41733333333333333,
+          "recall": 0.5690909090909091
+        }
+      }
+    },
+    "computed_causally": true,
+    "validation_gnn_lift": -0.3733305094785096
+  },
+  "registered_model_version": 2
+}

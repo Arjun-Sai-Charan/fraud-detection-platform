@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features feature-store train train-xgb train-xgb-local export-model benchmark gnn serve serve-registry test
+.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local export-model benchmark gnn serve serve-registry test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --python $(VENV)/bin/python -r requirements.txt
@@ -32,8 +32,13 @@ TRACKING_URI ?= file:./mlruns_local
 export-model:
 	$(VENV)/bin/python -m scripts.export_model --tracking-uri $(TRACKING_URI)
 
-gnn:
-	$(VENV)/bin/python -m src.models.train_gnn
+train-gnn:
+	$(VENV)/bin/python -m src.models.train_gnn --tracking-uri http://localhost:5000
+
+train-gnn-local:
+	$(VENV)/bin/python -m src.models.train_gnn --tracking-uri file:./mlruns_local
+
+gnn: train-gnn
 
 serve:
 	$(VENV)/bin/python -m uvicorn src.serving.api:app --host 0.0.0.0 --port 8000
