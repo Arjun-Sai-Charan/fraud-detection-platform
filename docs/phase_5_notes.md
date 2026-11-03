@@ -1,47 +1,48 @@
-# Phase 5: Graph, GNN, and blend
+# Phase 5: Graph, GNN, and blend (updated Phase 5b run)
 
-## What was built
+## What changed
 
-`make train-gnn-local` runs the local CPU workflow with `file:./mlruns_local`; `make train-gnn` targets the MLflow server at `http://localhost:5000`. Both use the same deterministic code, random seed 42, and fixed small GraphSAGE configuration. The real graph model is registered as `fraud-gnn` (local version 2). The shuffled-edge control is also logged to MLflow.
+The original GNN run stopped after only eight full-batch updates and reached validation PR-AUC 0.0439. That was too early to support the previous no-lift conclusion. This retraining adds a direct transaction-feature projection to the classifier path, trains up to 300 epochs with patience 30, evaluates validation PR-AUC each epoch, and tests learning rates 0.003, 0.01, and 0.03 with hidden sizes 64 and 128. Dropout is 0.2. Each epoch's training loss and validation PR-AUC are logged to MLflow. The selected configuration and epoch traces are in `results/ablation.json`; the plotted traces are in `results/gnn_training_curve.png`.
 
-The graph includes transaction, uid, device, email-domain, and addr1 nodes, with forward and reverse edges. The current XGBoost artifact provides **52** numeric model inputs; `transaction_dt` remains metadata and is not an input. Transaction features are median-imputed and standardized using training rows only. Labels are never graph node inputs. Training uses only train transactions and labels; validation and test scores use cumulative train+validation and train+validation+test feature graphs respectively.
+The local run selected hidden size 64 and learning rate 0.01, with best validation PR-AUC **0.15886** at epoch 121. That exceeds logistic regression's validation PR-AUC **0.08321** from `results/xgb_metrics.json`, and improves on the prior 0.0439 result. The first grid candidate early-stopped; the second was truncated at epoch 130 by the 600-second training cap, so four combinations (including hidden size 128) were not evaluated. This is a partial grid result, not a claim that the best possible setting was found. The shuffled-edge model was retrained with the selected hyperparameters; its validation PR-AUC was **0.14072**.
 
-Neither `pyg-lib` nor `torch-sparse` is installed, so this environment uses full-batch graph computation without `NeighborLoader`. The train, validation, and test snapshot sizes are 90,000, 120,000, and 150,000 transactions. Real graph model fitting took 8.14 seconds; shuffled-edge fitting took 7.74 seconds. The full local pipeline, including graph preparation, scoring, the causal graph-feature experiment, MLflow logging, and registration, completed in about two minutes.
+The shuffled result is close to the real graph result, so the evidence for a strong relational-structure benefit remains weak. On test, GNN PR-AUC is **0.27174** versus **0.26350** for shuffled edges; both remain below XGBoost at **0.55306**. Test was used only for final reporting, not grid or blend selection.
 
-`results/ablation.json` has the complete run, split rates, validation blend grid, graph cap report, metrics, and alert-budget results. `artifacts/gnn/` contains `gnn_scores.parquet`, `rings.parquet`, `blend_config.json`, and the hub report; it is ignored by Git. `fraud-gnn` is registered in the local file store. MLflow server mode remains **UNVERIFIED** until you run `make train-gnn` in your terminal.
+## Model and graph
 
-## Degree cap and temporal limits
+`make train-gnn-local` runs against `file:./mlruns_local`; `make train-gnn` targets `http://localhost:5000`. The local run registered `fraud-gnn` version **3**. Server-mode training remains **UNVERIFIED** until `make train-gnn` is run in the user's terminal.
 
-The degree cap is the 99.5th percentile of TRAIN degree for each entity type. In the full snapshot, caps removed 187 uid nodes / 46,898 edges, 6 device nodes / 45,307 edges, 1 email-domain node / 55,834 edges, and 4 addr1 nodes / 43,999 edges. The per-type caps and remaining edges are in the `hub_cap` section of `results/ablation.json` and are explained in [gnn_notes.md](gnn_notes.md).
+The heterogeneous graph contains transaction, UID, device, email-domain, and addr1 nodes with forward and reverse edges. Transaction nodes use the same 52 numeric inputs as the existing XGBoost model. Missing values are median-imputed and standardized using training rows only. The transaction classifier includes a direct projection of its own feature vector plus the two GraphSAGE message-passing layers. Labels are not graph node inputs.
 
-Labels never enter node features. Still, within a validation or test snapshot a transaction can receive feature-only messages from entity-sharing transactions later in the same split. Offline GNN scores may therefore be slightly optimistic compared with strictly live scoring. Ring assignment is also offline: it groups flagged test transactions into connected components. A streaming system would build ring membership incrementally.
+Neither `pyg-lib` nor `torch-sparse` is installed, so the run uses full-batch graph computation without `NeighborLoader`. Train, validation and test snapshots contain 90,000, 120,000 and 150,000 transactions. The run took approximately 10 minutes overall and hit the configured 600-second cap during the validation grid; see `time_cap_hit` and `gnn_grid_runs` in the saved ablation JSON for exact detail.
 
-## Test results
+The graph degree cap remains the 99.5th percentile of TRAIN degree by entity type. Saved removal counts are: UID 187 nodes / 46,898 edges; device 6 / 45,307; email domain 1 / 55,834; addr1 4 / 43,999. Rings are assigned offline to flagged test transactions, not incrementally as a streaming system would do.
 
-The test fraud base rate is **3.6667%**. PR-AUC should be considered alongside this base rate. The GNN had no useful lift: its validation PR-AUC was **0.04389**, compared with **0.41722** for XGBoost. The shuffled-edge validation PR-AUC was **0.04472**, effectively matching the real graph. On test, the real and shuffled graph PR-AUCs were **0.13955** and **0.13434**, while XGBoost scored **0.55306**. The validation blend grid selected XGBoost weight **1.0**, so the final blend is the XGBoost score. The graph did not add predictive value in this run.
+## Test comparison
+
+The test fraud base rate is 3.6667%; PR-AUC is shown with that base rate in mind. These values are from the current `results/ablation.json` run.
 
 | Test scorer | PR-AUC | ROC-AUC |
 |---|---:|---:|
 | XGBoost | 0.55306 | 0.89322 |
-| GNN, real graph | 0.13955 | 0.75355 |
-| Blend (XGBoost weight 1.0) | 0.55306 | 0.89322 |
-| GNN, shuffled edges | 0.13434 | 0.75018 |
+| GNN, real graph | 0.27174 | 0.76647 |
+| Blend | 0.55306 | 0.89322 |
+| GNN, shuffled edges | 0.26350 | 0.81123 |
 
-Precision / recall at each model's top alert budget:
+The validation blend search still selects XGBoost weight **1.0**, so the final blend is XGBoost alone. This training fixes the underfit evidence but does not establish that the graph improves the final model.
 
-| Test scorer | 1% P / R | 2% P / R | 3% P / R | 5% P / R |
+| Test scorer | 1% precision / recall | 2% precision / recall | 3% precision / recall | 5% precision / recall |
 |---|---:|---:|---:|---:|
-| XGBoost | 0.8967 / 0.2445 | 0.7550 / 0.4118 | 0.6133 / 0.5018 | 0.4373 / 0.5964 |
-| GNN, real graph | 0.2600 / 0.0709 | 0.2083 / 0.1136 | 0.1978 / 0.1618 | 0.1740 / 0.2373 |
-| Blend | 0.8967 / 0.2445 | 0.7550 / 0.4118 | 0.6133 / 0.5018 | 0.4373 / 0.5964 |
-| GNN, shuffled edges | 0.2733 / 0.0745 | 0.2417 / 0.1318 | 0.2044 / 0.1673 | 0.1773 / 0.2418 |
+| XGBoost and blend | 0.8967 / 0.2445 | 0.7550 / 0.4118 | 0.6133 / 0.5018 | 0.4373 / 0.5964 |
+| GNN, real graph | 0.5700 / 0.1555 | 0.4333 / 0.2364 | 0.3411 / 0.2791 | 0.2547 / 0.3473 |
+| GNN, shuffled edges | 0.5033 / 0.1373 | 0.3867 / 0.2109 | 0.3200 / 0.2618 | 0.2707 / 0.3691 |
 
-The validation top-3% blend threshold is **0.1192927361**, selecting 900 of 30,000 validation rows. Because the selected XGBoost blend weight is 1.0, this matches the Phase 3 XGBoost score threshold. On test, that fixed threshold flags 1,184 rows. Among them, **893 transactions** belong to **46 multi-transaction rings**; the rest have no multi-transaction ring assignment.
+The blend threshold remains the validation top-3% boundary, **0.1192927361**, selecting 900/30,000 validation rows. The fixed threshold flags 1,184 test rows; 893 are assigned to 46 multi-transaction rings. The ring membership is an offline test analysis.
 
-Since GNN did not improve validation PR-AUC and shuffled edges performed about the same, a compact causal graph-feature XGBoost experiment was also run. It added five prior-history features (four entity degree counts and distinct uids per device). With 57 features total, it reached validation PR-AUC **0.42811** (base XGBoost: 0.41722) but test PR-AUC **0.53086** and ROC-AUC **0.88562**, below base XGBoost's 0.55306 / 0.89322. The small validation gain did not carry to test, so these extra features are not selected.
+The causal graph-feature XGBoost experiment is unchanged: five strictly prior entity-history features produced validation PR-AUC 0.42811 and test PR-AUC 0.53086, below the original XGBoost test PR-AUC. Those features are not selected.
 
-## Serving and tests
+## Limitations and verification
 
-The serving scorer reads precomputed GNN scores and ring assignments by transaction ID. When a GNN score exists, it returns `xgb_score`, `gnn_score`, the weighted `final_score`, and ring fields; the alert uses the saved blend threshold. If GNN artifacts or a score for that ID are absent, it falls back to the XGBoost threshold and score. The response schema is unchanged. A local scorer call using Feast's SQLite online store and the generated GNN artifacts was verified.
+Within each validation/test snapshot, earlier transactions can receive feature-only messages from transactions later in the same split. No labels enter the graph, but this makes offline scoring somewhat optimistic compared with live incremental scoring. Graph cap, normalization, ring and scorer behavior are covered by the Phase 5 tests.
 
-Focused tests cover blend math, ring grouping, hub-edge capping, train-only normalization, scorer fallback, and serving of saved GNN/ring artifacts. The full `.venv/bin/python -m pytest -q` run completed with **23 passed** (31 dependency deprecation warnings). Kafka and MLflow server integrations were not contacted in this environment.
+The local-file-store run completed and wrote scores, rings, blend configuration, updated ablation metrics and a training curve. MLflow server mode, Kafka integration and the final live scoring path remain unverified in this environment.

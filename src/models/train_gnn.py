@@ -15,6 +15,7 @@ import mlflow.pytorch
 import mlflow.xgboost
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import torch
 from sklearn.metrics import average_precision_score
 from torch import nn
@@ -47,14 +48,20 @@ ARTIFACT_DIR = Path("artifacts/gnn")
 SCORES_PATH = ARTIFACT_DIR / "gnn_scores.parquet"
 RINGS_PATH = ARTIFACT_DIR / "rings.parquet"
 ABLATION_PATH = RESULTS_DIR / "ablation.json"
+CURVE_PATH = RESULTS_DIR / "gnn_training_curve.png"
 HIDDEN_SIZE = 64
-MAX_EPOCHS = 12
-PATIENCE = 3
+MAX_EPOCHS = 300
+PATIENCE = 30
+LEARNING_RATES = (0.003, 0.01, 0.03)
+HIDDEN_SIZES = (64, 128)
+DROPOUT = 0.2
+TIME_CAP_SECONDS = 600.0
 
 
 class HeteroSAGE(nn.Module):
     def __init__(self, hidden_size: int = HIDDEN_SIZE, dropout: float = 0.2):
         super().__init__()
+        self.transaction_skip = nn.LazyLinear(hidden_size)
         self.conv1 = HeteroConv(
             {relation: SAGEConv((-1, -1), hidden_size) for relation in ALL_RELATIONS},
             aggr="sum",
@@ -73,7 +80,8 @@ class HeteroSAGE(nn.Module):
             for node_type, value in features.items()
         }
         features = self.conv2(features, graph.edge_index_dict)
-        return self.classifier(features["transaction"]).squeeze(-1)
+        transaction = F.relu(features["transaction"] + self.transaction_skip(graph["transaction"].x))
+        return self.classifier(transaction).squeeze(-1)
 
 
 def set_deterministic(seed: int = SEED) -> None:
@@ -100,9 +108,12 @@ def _train_graph_model(
     *,
     seed: int,
     run_name: str,
+    learning_rate: float,
+    hidden_size: int,
+    deadline: float,
 ) -> tuple[HeteroSAGE, np.ndarray, dict[str, Any]]:
     set_deterministic(seed)
-    model = HeteroSAGE()
+    model = HeteroSAGE(hidden_size=hidden_size, dropout=DROPOUT)
     # Initialize lazy GraphSAGE weights before the optimizer is created.
     model.eval()
     with torch.no_grad():
@@ -114,14 +125,18 @@ def _train_graph_model(
     if positives == 0:
         raise ValueError("Training split has no positive labels")
     criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor(negatives / positives))
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.003, weight_decay=1e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4)
     val_y = labels[train_count:validation_end]
     best_score = -1.0
     best_state = None
     best_epoch = 0
     wait = 0
     started = time.perf_counter()
+    history: list[dict[str, float]] = []
+    mlflow_step = 0
     for epoch in range(1, MAX_EPOCHS + 1):
+        if time.perf_counter() >= deadline:
+            break
         model.train()
         optimizer.zero_grad(set_to_none=True)
         logits = model(train_graph)[:train_count]
@@ -131,6 +146,10 @@ def _train_graph_model(
 
         validation_scores = _predict(model, validation_graph, train_count, validation_end)
         val_pr_auc = float(average_precision_score(val_y, validation_scores))
+        history.append({"epoch": float(epoch), "train_loss": float(loss.item()), "validation_pr_auc": val_pr_auc})
+        if mlflow.active_run():
+            mlflow.log_metrics({"train_loss": float(loss.item()), "validation_pr_auc_epoch": val_pr_auc}, step=mlflow_step)
+        mlflow_step += 1
         if val_pr_auc > best_score + 1e-7:
             best_score = val_pr_auc
             best_epoch = epoch
@@ -141,7 +160,7 @@ def _train_graph_model(
         if wait >= PATIENCE:
             break
     if best_state is None:
-        raise RuntimeError("GNN training did not produce a checkpoint")
+        raise TimeoutError("GNN time cap expired before the first completed epoch")
     model.load_state_dict(best_state)
     elapsed = time.perf_counter() - started
     info = {
@@ -151,6 +170,11 @@ def _train_graph_model(
         "validation_pr_auc": best_score,
         "training_seconds": elapsed,
         "positive_weight": negatives / positives,
+        "learning_rate": learning_rate,
+        "hidden_size": hidden_size,
+        "dropout": DROPOUT,
+        "history": history,
+        "time_cap_hit": time.perf_counter() >= deadline,
     }
     return model, validation_scores if best_epoch == epoch else _predict(model, validation_graph, train_count, validation_end), info
 
@@ -266,41 +290,107 @@ def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEA
     ids_test = bundle.transaction_ids[bundle.validation_end:]
     xgb_train_scores, xgb_val_scores, xgb_test_scores = _raw_xgb_scores(bundle, features_path)
 
+    deadline = time.perf_counter() + TIME_CAP_SECONDS
+    # Reserve time for the required shuffled-edge control after model selection.
+    grid_deadline = deadline - 180.0
     run_summaries = {}
     predictions = {}
     trained_models = {}
+    grid_runs: list[dict[str, Any]] = []
+    best_real: tuple[float, dict[str, Any], HeteroSAGE, np.ndarray] | None = None
+    cap_hit = False
+    for hidden_size in HIDDEN_SIZES:
+        for learning_rate in LEARNING_RATES:
+            if time.perf_counter() >= grid_deadline:
+                cap_hit = True
+                break
+            with mlflow.start_run(run_name=f"graphsage_real_h{hidden_size}_lr{learning_rate}"):
+                mlflow.set_tags({"model_family": "heterogeneous_graphsage", "graph_variant": "real_graph", "grid": "validation_selected"})
+                mlflow.log_params({"seed": SEED, "hidden_size": hidden_size, "learning_rate": learning_rate,
+                                   "dropout": DROPOUT, "layers": 2, "max_epochs": MAX_EPOCHS,
+                                   "patience": PATIENCE, "full_batch": True, "neighbor_loader": False,
+                                   "hub_cap_percentile": 99.5})
+                model, val_scores, info = _train_graph_model(
+                    train_graph, validation_graph, bundle.labels, bundle.train_count, bundle.validation_end,
+                    seed=SEED, run_name="real_graph", learning_rate=learning_rate,
+                    hidden_size=hidden_size, deadline=grid_deadline,
+                )
+                info["validation_pr_auc"] = float(average_precision_score(y_val, val_scores))
+                grid_runs.append(info)
+                mlflow.log_metrics({"best_validation_pr_auc": info["validation_pr_auc"],
+                                    "best_epoch": float(info["best_epoch"]),
+                                    "training_seconds": info["training_seconds"]})
+                mlflow.log_dict(info["history"], "epoch_history.json")
+                if best_real is None or info["validation_pr_auc"] > best_real[0]:
+                    best_real = (info["validation_pr_auc"], info, model, val_scores)
+                if info["time_cap_hit"]:
+                    cap_hit = True
+                    break
+        if cap_hit:
+            break
+    if best_real is None:
+        raise TimeoutError("GNN time cap expired before a grid candidate completed")
+    _, best_info, best_model, best_val_scores = best_real
     for name, graphs in (
         ("real_graph", (train_graph, validation_graph, test_graph)),
         ("shuffled_edges", (shuffled_train, shuffled_validation, shuffled_test)),
     ):
-        model, _, info = _train_graph_model(
-            graphs[0], graphs[1], bundle.labels, bundle.train_count, bundle.validation_end,
-            seed=SEED, run_name=name,
-        )
-        val_scores = _predict(model, graphs[1], bundle.train_count, bundle.validation_end)
+        if name == "real_graph":
+            model, info = best_model, best_info
+            val_scores = best_val_scores
+        else:
+            with mlflow.start_run(run_name="graphsage_shuffled_edges_selected_config"):
+                mlflow.set_tags({"model_family": "heterogeneous_graphsage", "graph_variant": name})
+                mlflow.log_params({"seed": SEED, "hidden_size": best_info["hidden_size"],
+                                   "learning_rate": best_info["learning_rate"], "dropout": DROPOUT,
+                                   "layers": 2, "max_epochs": MAX_EPOCHS, "patience": PATIENCE,
+                                   "full_batch": True, "neighbor_loader": False,
+                                   "positive_weight": best_info["positive_weight"], "hub_cap_percentile": 99.5})
+                model, val_scores, info = _train_graph_model(
+                    graphs[0], graphs[1], bundle.labels, bundle.train_count, bundle.validation_end,
+                    seed=SEED, run_name=name, learning_rate=best_info["learning_rate"],
+                    hidden_size=best_info["hidden_size"], deadline=deadline,
+                )
+                mlflow.log_dict(info["history"], "epoch_history.json")
+                mlflow.log_metrics({"best_validation_pr_auc": float(average_precision_score(y_val, val_scores)),
+                                    "best_epoch": float(info["best_epoch"]),
+                                    "training_seconds": info["training_seconds"]})
         test_scores = _predict(model, graphs[2], bundle.validation_end, len(bundle.transaction_ids))
         predictions[name] = {"validation": val_scores, "test": test_scores}
         trained_models[name] = model
         run_summaries[name] = info
-        with mlflow.start_run(run_name=f"graphsage_{name}"):
-            mlflow.set_tags({"model_family": "heterogeneous_graphsage", "graph_variant": name})
-            mlflow.log_params({
-                "seed": SEED, "hidden_size": HIDDEN_SIZE, "layers": 2,
-                "max_epochs": MAX_EPOCHS, "patience": PATIENCE,
-                "full_batch": True, "neighbor_loader": False,
-                "positive_weight": info["positive_weight"], "hub_cap_percentile": 99.5,
-            })
-            mlflow.log_metrics({
-                "validation_pr_auc": float(average_precision_score(y_val, val_scores)),
-                "test_pr_auc": float(average_precision_score(y_test, test_scores)),
-                "test_roc_auc": float(evaluate_scores(y_test, test_scores, ids_test)["roc_auc"]),
-                "best_epoch": float(info["best_epoch"]),
-                "training_seconds": info["training_seconds"],
-            })
-            if name == "real_graph":
+        if name == "real_graph":
+            with mlflow.start_run(run_name="graphsage_selected_real_model"):
+                mlflow.set_tags({"model_family": "heterogeneous_graphsage", "graph_variant": name})
+                mlflow.log_params({"seed": SEED, "hidden_size": info["hidden_size"],
+                                   "learning_rate": info["learning_rate"], "dropout": DROPOUT,
+                                   "layers": 2, "max_epochs": MAX_EPOCHS, "patience": PATIENCE,
+                                   "full_batch": True, "neighbor_loader": False,
+                                   "positive_weight": info["positive_weight"], "hub_cap_percentile": 99.5})
+                mlflow.log_metrics({"validation_pr_auc": float(average_precision_score(y_val, val_scores)),
+                                    "test_pr_auc": float(average_precision_score(y_test, test_scores)),
+                                    "test_roc_auc": float(evaluate_scores(y_test, test_scores, ids_test)["roc_auc"]),
+                                    "best_epoch": float(info["best_epoch"]),
+                                    "training_seconds": info["training_seconds"]})
                 mlflow.pytorch.log_model(model, artifact_path="model")
                 mlflow.log_dict(bundle.normalization, "train_normalization.json")
                 mlflow.log_dict(bundle.hub_report, "hub_report.json")
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+    for trial in grid_runs:
+        history = trial["history"]
+        label = f"h={trial['hidden_size']}, lr={trial['learning_rate']}"
+        axes[0].plot([row["epoch"] for row in history], [row["train_loss"] for row in history], label=label)
+        axes[1].plot([row["epoch"] for row in history], [row["validation_pr_auc"] for row in history], label=label)
+    axes[0].set(xlabel="Epoch", ylabel="Train BCE loss", title="Training loss")
+    axes[1].set(xlabel="Epoch", ylabel="Validation PR-AUC", title="Validation PR-AUC")
+    axes[1].axhline(0.0832084, color="black", linestyle="--", linewidth=1, label="Logistic validation PR-AUC")
+    for axis in axes:
+        axis.legend(fontsize=7)
+    fig.tight_layout()
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    fig.savefig(CURVE_PATH, dpi=150)
+    plt.close(fig)
 
     blend_weight, weight_scores = choose_blend_weight(y_val, xgb_val_scores, predictions["real_graph"]["validation"])
     val_blend = blend_scores(xgb_val_scores, predictions["real_graph"]["validation"], blend_weight)
@@ -339,6 +429,10 @@ def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEA
         "hub_cap": {"selection": "99.5th percentile of TRAIN entity degree by type", "by_entity_type": bundle.hub_report},
         "train_normalization": bundle.normalization,
         "gnn_runs": run_summaries,
+        "gnn_grid_runs": [{key: value for key, value in item.items() if key != "history"} for item in grid_runs],
+        "time_cap_seconds": TIME_CAP_SECONDS,
+        "time_cap_hit": cap_hit or any(info.get("time_cap_hit", False) for info in run_summaries.values()),
+        "selected_hyperparameters": {"hidden_size": best_info["hidden_size"], "learning_rate": best_info["learning_rate"], "dropout": DROPOUT},
         "validation_blend_grid_pr_auc": {str(key): value for key, value in weight_scores.items()},
         "blend_weight_xgb": blend_weight,
         "blend_threshold": blend_threshold,

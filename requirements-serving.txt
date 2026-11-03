@@ -1,4 +1,4 @@
-# Serving image dependencies, pinned to the same versions as requirements.txt.
+# Serving runtime pins mirrored from requirements.txt; test/visualization tools omitted.
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.5.1+cpu
 torch-geometric==2.6.1
@@ -12,7 +12,7 @@ confluent-kafka==2.8.0
 streamlit==1.42.0
 pandas==2.2.3
 numpy==1.26.4
-pyarrow==19.0.0
-scikit-learn==1.6.1
+pyarrow==18.1.0
+scikit-learn==1.5.2
 requests==2.32.3
-
+sqlalchemy==2.0.36

@@ -5,7 +5,7 @@ VENV ?= .venv
 .PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local export-model benchmark gnn serve serve-registry test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
-	$(UV) pip install --python $(VENV)/bin/python -r requirements.txt
+	$(UV) pip install --index-strategy unsafe-best-match --python $(VENV)/bin/python -r requirements.txt
 
 data:
 	$(VENV)/bin/python -m src.data.prepare
