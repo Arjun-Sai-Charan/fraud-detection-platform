@@ -1,6 +1,14 @@
 """Streamlit analyst view for stored fraud alerts and offline ring context."""
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Streamlit adds the script's directory to sys.path, not necessarily the repo root.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 import pandas as pd
 import streamlit as st
 

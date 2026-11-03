@@ -65,7 +65,7 @@ demo-data:
 	$(VENV)/bin/python -m scripts.seed_demo_alerts
 
 dashboard:
-	$(VENV)/bin/streamlit run src/dashboard/app.py --server.port 8501
+	PYTHONPATH=. $(VENV)/bin/streamlit run src/dashboard/app.py --server.port 8501
 
 test:
 	$(VENV)/bin/python -m pytest -q

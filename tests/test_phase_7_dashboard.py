@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
+from pathlib import Path
+import subprocess
+import sys
 
 import httpx
 import pandas as pd
@@ -151,22 +155,39 @@ def test_ring_precision_reports_rates_and_counts(monkeypatch, tmp_path):
         lambda *args, **kwargs: pd.DataFrame({"transaction_id": [1, 2, 3], "split": ["test"] * 3, "gnn_score": [0.1, 0.1, 0.9]}),
     )
     features = pd.DataFrame({
-        "transaction_id": [1, 2, 3],
-        "split": ["test"] * 3,
-        "isFraud": [1, 0, 1],
-        "f": [1.0, 2.0, 3.0],
+        "transaction_id": [1, 2, 3, 4, 5],
+        "split": ["test"] * 5,
+        "isFraud": [1, 0, 1, 0, 0],
+        "f": [1.0, 2.0, 3.0, 4.0, 5.0],
     })
 
     class Model:
         def predict_proba(self, frame):
-            return pd.DataFrame({0: [0.1, 0.2, 0.9], 1: [0.9, 0.8, 0.1]}).to_numpy()
+            return pd.DataFrame({0: [0.1] * 5, 1: [0.9, 0.8, 0.7, 0.6, 0.5]}).to_numpy()
 
-    rings = pd.DataFrame({"transaction_id": [1, 2, 3], "ring_id": ["a", None, "b"], "ring_size": [2, None, 2]})
-    # A threshold that flags all rows makes both ring groups directly testable.
-    result = compare_ring_precision(features, Model(), ["f"], rings, {"blend_weight_xgb": 1.0, "threshold": 0.0})
-    assert result["flagged_transaction_count"] == 3
-    assert result["comparison"]["inside_multi_transaction_rings"]["transaction_count"] == 2
-    assert result["comparison"]["outside_multi_transaction_rings"]["fraud_rate"] == 0.0
+    rings = pd.DataFrame({"transaction_id": [1, 2, 3, 4, 5], "ring_id": ["strong", "strong", "weak", "weak", None], "ring_size": [2, 2, 2, 2, None]})
+    entities = pd.DataFrame({
+        "transaction_id": [1, 2, 3, 4, 5],
+        "uid": ["u", "u", "u3", "u4", "u5"],
+        "DeviceInfo": ["d1", "d2", "d3", "d4", "d5"],
+        "P_emaildomain": ["e1", "e2", "e", "e", "e5"],
+        "addr1": [10, 20, 30, 40, 50],
+    })
+    result = compare_ring_precision(
+        features, Model(), ["f"], rings,
+        {"blend_weight_xgb": 1.0, "threshold": 0.0},
+        entities,
+        {"uid": {"u"}, "device": set(), "email_domain": {"e"}, "addr1": set()},
+    )
+    assert result["flagged_transaction_count"] == 5
+    breakdown = result["ring_definition_breakdown"]
+    assert breakdown["ring_size_distribution"]["ring_count"] == 2
+    assert breakdown["ring_size_distribution"]["median"] == 2
+    assert breakdown["ring_size_distribution"]["share_of_all_flagged_rows_in_largest_ring"] == 0.4
+    assert breakdown["fraud_rate_by_link_type"]["strong_links_only"]["fraud_rate"] == 0.5
+    assert breakdown["fraud_rate_by_link_type"]["includes_weak_link"]["fraud_rate"] == 0.5
+    assert breakdown["fraud_rate_by_link_type"]["outside_any_ring"]["fraud_rate"] == 0.0
+    assert breakdown["ring_counts_by_link_type"]["only_weak_links"] == 1
 
 
 def test_streamlit_apptest_smoke_when_supported():
@@ -177,3 +198,25 @@ def test_streamlit_apptest_smoke_when_supported():
     app = AppTest.from_file("src/dashboard/app.py", default_timeout=15).run()
     assert not app.exception
     assert any("Fraud analyst dashboard" in title.value for title in app.title)
+
+
+def test_dashboard_entrypoint_imports_helpers_from_other_working_directory(tmp_path):
+    repo_root = Path(__file__).resolve().parents[1]
+    script_dir = repo_root / "src/dashboard"
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = str(script_dir)
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import app; from src.dashboard.data import fetch_metrics; "
+            "assert str(app.REPO_ROOT) in __import__('sys').path; print('dashboard import ok')",
+        ],
+        cwd=tmp_path,
+        env=environment,
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=20,
+    )
+    assert "dashboard import ok" in result.stdout

@@ -16,5 +16,53 @@
       "fraud_rate": 0.5910652920962199
     }
   },
-  "interpretation_note": "Uses ground-truth test labels offline; labels are unavailable during live scoring."
+  "interpretation_note": "Uses ground-truth test labels offline; labels are unavailable during live scoring.",
+  "ring_definition_breakdown": {
+    "ring_size_distribution": {
+      "ring_count": 46,
+      "flagged_rows_in_rings": 893,
+      "median": 2.0,
+      "p90": 9.5,
+      "max": 727,
+      "largest_ring_id": "ring-3107135",
+      "largest_ring_flagged_rows": 727,
+      "share_of_all_flagged_rows_in_largest_ring": 0.6140202702702703,
+      "ring_count_by_size": {
+        "2": 24,
+        "3": 10,
+        "4": 3,
+        "5": 1,
+        "6": 2,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "14": 1,
+        "15": 1,
+        "727": 1
+      }
+    },
+    "fraud_rate_by_link_type": {
+      "strong_links_only": {
+        "transaction_count": 140,
+        "fraud_count": 87,
+        "fraud_rate": 0.6214285714285714
+      },
+      "includes_weak_link": {
+        "transaction_count": 753,
+        "fraud_count": 351,
+        "fraud_rate": 0.46613545816733065
+      },
+      "outside_any_ring": {
+        "transaction_count": 291,
+        "fraud_count": 172,
+        "fraud_rate": 0.5910652920962199
+      }
+    },
+    "ring_counts_by_link_type": {
+      "strong_links_only": 39,
+      "includes_weak_link": 7,
+      "only_weak_links": 3,
+      "unclassified": 0
+    }
+  }
 }
