@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fraud-settings
+  namespace: fraud
+data:
+  KAFKA_BOOTSTRAP_DOCKER: kafka:29092
+  KAFKA_BOOTSTRAP_HOST: kafka:29092
+  KAFKA_TRANSACTIONS_TOPIC: transactions
+  KAFKA_FRAUD_SCORES_TOPIC: fraud-scores
+  MLFLOW_TRACKING_URI: http://mlflow:5000
+  FRAUD_API_URL: http://scoring:8000
+  FRAUD_MODEL_SOURCE: local
+  FRAUD_SERVING_DB_PATH: /runtime/serving.db
+  TRANSACTION_LIMIT: "1000"
+  PRODUCER_RATE: "20"

@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local drift retrain retrain-local export-model benchmark ring-precision demo-data dashboard gnn serve serve-registry test
+.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local drift retrain retrain-local export-model benchmark ring-precision demo-data dashboard k8s-build k8s-up k8s-demo k8s-status k8s-down gnn serve serve-registry test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --index-strategy unsafe-best-match --python $(VENV)/bin/python -r requirements.txt
@@ -66,6 +66,24 @@ demo-data:
 
 dashboard:
 	PYTHONPATH=. $(VENV)/bin/streamlit run src/dashboard/app.py --server.port 8501
+
+k8s-build:
+	eval "$$(minikube docker-env)" && docker build -f docker/api.Dockerfile -t fraud-api:phase8 . && docker build -f docker/dashboard.Dockerfile -t fraud-dashboard:phase8 . && docker build -f docker/jobs.Dockerfile -t fraud-jobs:phase8 .
+
+k8s-up:
+	kubectl apply -f k8s/00-namespace.yaml
+	kubectl apply -f k8s/
+
+k8s-demo:
+	kubectl delete job producer-demo -n fraud --ignore-not-found
+	kubectl apply -f k8s/60-jobs.yaml
+	kubectl wait --for=condition=complete job/producer-demo -n fraud --timeout=15m
+
+k8s-status:
+	kubectl get pods,services,jobs,cronjobs -n fraud -o wide
+
+k8s-down:
+	kubectl delete namespace fraud --ignore-not-found
 
 test:
 	$(VENV)/bin/python -m pytest -q

@@ -1,0 +1,12 @@
+# Drift/retraining modules import matplotlib, Feast and the training pipeline.
+evidently==0.5.1
+mlflow==2.19.0
+xgboost==2.1.4
+scikit-learn==1.5.2
+feast==0.40.1
+pandas==2.2.3
+numpy==1.26.4
+pyarrow==18.1.0
+matplotlib==3.10.0
+sqlalchemy==2.0.36
+requests==2.32.3
