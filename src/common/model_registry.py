@@ -28,7 +28,13 @@ def serving_model_version(
         candidate_version = str(client.get_model_version_by_alias(model_name, candidate_alias).version)
     except (MlflowException, AttributeError):
         pass
-    eligible = [version for version in versions if str(version.version) != candidate_version]
+    eligible = [
+        version
+        for version in versions
+        if str(version.version) != candidate_version
+        and getattr(version, "tags", {}).get("retraining_role") != "candidate"
+        and getattr(version, "tags", {}).get("candidate_role") != "candidate"
+    ]
     if not eligible:
         raise ValueError(
             f"No approved serving version for {model_name!r}; candidate alias is not served automatically"

@@ -1,7 +1,7 @@
 {
   "drift_share": 0.40384615384615385,
-  "evidently_drift_share_threshold": 0.3,
-  "dataset_drift": true,
+  "evidently_drift_share_threshold": 0.5,
+  "dataset_drift": false,
   "number_of_columns": 52,
   "number_of_drifted_columns": 21,
   "drifted_columns": [
@@ -26,6 +26,104 @@
     "txn_count_last_1h",
     "txn_count_last_24h",
     "uid_prior_txn_count"
+  ],
+  "drifted_column_details": [
+    {
+      "name": "C1",
+      "tags": []
+    },
+    {
+      "name": "C10",
+      "tags": []
+    },
+    {
+      "name": "C11",
+      "tags": []
+    },
+    {
+      "name": "C12",
+      "tags": []
+    },
+    {
+      "name": "C13",
+      "tags": []
+    },
+    {
+      "name": "C14",
+      "tags": []
+    },
+    {
+      "name": "C2",
+      "tags": []
+    },
+    {
+      "name": "C4",
+      "tags": []
+    },
+    {
+      "name": "C6",
+      "tags": []
+    },
+    {
+      "name": "C7",
+      "tags": []
+    },
+    {
+      "name": "C8",
+      "tags": []
+    },
+    {
+      "name": "D1",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D5",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D7",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "M6_encoded",
+      "tags": []
+    },
+    {
+      "name": "ProductCD_encoded",
+      "tags": []
+    },
+    {
+      "name": "R_emaildomain_encoded",
+      "tags": []
+    },
+    {
+      "name": "device_change_vs_previous",
+      "tags": []
+    },
+    {
+      "name": "txn_count_last_1h",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "txn_count_last_24h",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "uid_prior_txn_count",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    }
   ],
   "test_names": [
     "Jensen-Shannon distance",
@@ -296,9 +394,11 @@
   "reference_rows": 90000,
   "current_rows": 30000,
   "report_name": "validation_data_drift",
-  "trigger_threshold": 0.3,
+  "trigger_threshold": 0.6,
   "reference_split": "train",
   "current_split": "validation",
   "reference_fraud_rate": 0.026155555555555557,
-  "current_fraud_rate": 0.0172
+  "current_fraud_rate": 0.0172,
+  "trigger_eligible": false,
+  "informational_only_reason": "vs-TRAIN comparison spans multiple natural windows"
 }

@@ -1,23 +1,111 @@
 {
-  "created_at": "2026-11-02T18:30:54.294922+00:00",
+  "created_at": "2026-11-03T08:03:44.331643+00:00",
   "tracking_uri": "file:./mlruns_local",
-  "drift_report": "/home/arjun/fraud-platform/results/drift/test_data_drift.json",
-  "drift_share": 0.40384615384615385,
-  "drift_share_threshold": 0.3,
+  "drift_report": "results/drift/shifted_window_drift.json",
+  "drift_share": 1.0,
+  "drift_share_threshold": 0.6,
   "feedback_count": 0,
   "feedback_threshold": 25,
   "triggered": true,
   "trigger_reasons": [
-    "data_drift_share=0.403846>0.300000"
+    "data_drift_share=1.000000>0.600000"
   ],
   "dry_run": false,
   "include_feedback_requested": false,
+  "window_requested": "expanded",
   "model_name": "fraud-xgb",
   "registered_model_alias": "candidate",
   "status": "candidate_registered",
   "confirmed_feedback_rows_used": 0,
-  "registered_model_version": 3,
-  "selected_model": "unweighted",
-  "validation_pr_auc": 0.41721872734555976,
-  "evaluation_scope": "validation_and_test"
+  "effective_window": "train_plus_validation",
+  "registered_model_version": 4,
+  "champion_version": 2,
+  "expanded_training_rows": 120000,
+  "original_best_iteration": 402,
+  "n_estimators": 536,
+  "n_estimators_formula": "round(402 * 120000 / 90000)",
+  "feature_source": "feast_historical",
+  "feature_fallback_reason": null,
+  "candidate_vs_champion_test": {
+    "candidate": {
+      "pr_auc": 0.598377891792551,
+      "roc_auc": 0.9001206511481598,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "budget": 0.01,
+          "alerts": 300,
+          "alert_rate": 0.01,
+          "threshold_score": 0.6584290266036987,
+          "precision": 0.9333333333333333,
+          "recall": 0.2545454545454545
+        },
+        "2%": {
+          "budget": 0.02,
+          "alerts": 600,
+          "alert_rate": 0.02,
+          "threshold_score": 0.284755676984787,
+          "precision": 0.7983333333333333,
+          "recall": 0.4354545454545454
+        },
+        "3%": {
+          "budget": 0.03,
+          "alerts": 900,
+          "alert_rate": 0.03,
+          "threshold_score": 0.1630692034959793,
+          "precision": 0.6433333333333333,
+          "recall": 0.5263636363636364
+        },
+        "5%": {
+          "budget": 0.05,
+          "alerts": 1500,
+          "alert_rate": 0.05,
+          "threshold_score": 0.08681090921163559,
+          "precision": 0.4573333333333333,
+          "recall": 0.6236363636363637
+        }
+      }
+    },
+    "champion": {
+      "pr_auc": 0.5530590097963213,
+      "roc_auc": 0.8932203837684807,
+      "base_rate": 0.03666666666666667,
+      "alert_budgets": {
+        "1%": {
+          "budget": 0.01,
+          "alerts": 300,
+          "alert_rate": 0.01,
+          "threshold_score": 0.641617476940155,
+          "precision": 0.8966666666666666,
+          "recall": 0.24454545454545454
+        },
+        "2%": {
+          "budget": 0.02,
+          "alerts": 600,
+          "alert_rate": 0.02,
+          "threshold_score": 0.29044219851493835,
+          "precision": 0.755,
+          "recall": 0.4118181818181818
+        },
+        "3%": {
+          "budget": 0.03,
+          "alerts": 900,
+          "alert_rate": 0.03,
+          "threshold_score": 0.16988898813724518,
+          "precision": 0.6133333333333333,
+          "recall": 0.5018181818181818
+        },
+        "5%": {
+          "budget": 0.05,
+          "alerts": 1500,
+          "alert_rate": 0.05,
+          "threshold_score": 0.09160745143890381,
+          "precision": 0.43733333333333335,
+          "recall": 0.5963636363636363
+        }
+      }
+    },
+    "test_used_for": "final champion-versus-candidate comparison only"
+  },
+  "evaluation_scope": "test_final_comparison_only"
 }

@@ -1,7 +1,7 @@
 {
   "drift_share": 0.40384615384615385,
-  "evidently_drift_share_threshold": 0.3,
-  "dataset_drift": true,
+  "evidently_drift_share_threshold": 0.5,
+  "dataset_drift": false,
   "number_of_columns": 52,
   "number_of_drifted_columns": 21,
   "drifted_columns": [
@@ -26,6 +26,110 @@
     "txn_count_last_24h",
     "uid_is_hub",
     "uid_prior_txn_count"
+  ],
+  "drifted_column_details": [
+    {
+      "name": "C1",
+      "tags": []
+    },
+    {
+      "name": "C10",
+      "tags": []
+    },
+    {
+      "name": "C11",
+      "tags": []
+    },
+    {
+      "name": "C12",
+      "tags": []
+    },
+    {
+      "name": "C14",
+      "tags": []
+    },
+    {
+      "name": "C2",
+      "tags": []
+    },
+    {
+      "name": "C4",
+      "tags": []
+    },
+    {
+      "name": "C6",
+      "tags": []
+    },
+    {
+      "name": "C7",
+      "tags": []
+    },
+    {
+      "name": "C8",
+      "tags": []
+    },
+    {
+      "name": "D1",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D6",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D7",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D8",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "D9",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "ProductCD_encoded",
+      "tags": []
+    },
+    {
+      "name": "is_first_txn_for_uid",
+      "tags": []
+    },
+    {
+      "name": "txn_count_last_1h",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "txn_count_last_24h",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "uid_is_hub",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    },
+    {
+      "name": "uid_prior_txn_count",
+      "tags": [
+        "cumulative_by_construction"
+      ]
+    }
   ],
   "test_names": [
     "Jensen-Shannon distance",
@@ -296,9 +400,11 @@
   "reference_rows": 90000,
   "current_rows": 30000,
   "report_name": "test_data_drift",
-  "trigger_threshold": 0.3,
+  "trigger_threshold": 0.6,
   "reference_split": "train",
   "current_split": "test",
   "reference_fraud_rate": 0.026155555555555557,
-  "current_fraud_rate": 0.03666666666666667
+  "current_fraud_rate": 0.03666666666666667,
+  "trigger_eligible": false,
+  "informational_only_reason": "vs-TRAIN comparison spans multiple natural windows"
 }

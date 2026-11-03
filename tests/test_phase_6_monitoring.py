@@ -3,7 +3,14 @@ import json
 import numpy as np
 import pandas as pd
 
-from src.monitoring.drift import build_shifted_test, make_report
+from src.monitoring.drift import (
+    _evidently_summary,
+    _run_evidently,
+    build_shifted_test,
+    make_report,
+    natural_baseline_from_windows,
+    natural_trigger_threshold,
+)
 from src.monitoring.retrain import run_retraining, should_trigger
 from src.models.train_xgb import _prepare_training_splits
 from src.common.model_registry import serving_model_version
@@ -138,15 +145,16 @@ def test_feedback_rows_join_train_and_disable_test_evaluation():
 
 def test_candidate_alias_is_not_selected_as_serving_model():
     class Version:
-        def __init__(self, version):
+        def __init__(self, version, tags=None):
             self.version = str(version)
+            self.tags = tags or {}
 
     class Client:
-        versions = [Version(1), Version(2), Version(3)]
+        versions = [Version(1), Version(2), Version(3, {"retraining_role": "candidate"}), Version(4, {"retraining_role": "candidate"})]
 
         def get_model_version_by_alias(self, _name, alias):
             if alias == "candidate":
-                return Version(3)
+                return Version(4)
             raise MlflowException("alias not found")
 
         def search_model_versions(self, _query):
@@ -157,4 +165,87 @@ def test_candidate_alias_is_not_selected_as_serving_model():
 
     client = Client()
     assert serving_model_version(client, "fraud-xgb").version == "2"
-    assert serving_model_version(client, "fraud-xgb", "3").version == "3"
+    assert serving_model_version(client, "fraud-xgb", "4").version == "4"
+
+
+def test_scorer_filters_only_the_feast_relisting_warning(caplog):
+    import logging
+
+    from src.serving.scorer import FraudScorer, _FEAST_DEPRECATION
+
+    FraudScorer(model=object(), feature_store=object(), feature_list=[], threshold={})
+    with caplog.at_level(logging.WARNING):
+        logging.warning(_FEAST_DEPRECATION)
+        logging.warning("unrelated warning must remain visible")
+    messages = [record.getMessage() for record in caplog.records]
+    assert _FEAST_DEPRECATION not in messages
+    assert "unrelated warning must remain visible" in messages
+
+
+def test_promote_candidate_dry_run_does_not_set_champion_alias():
+    from scripts.promote_candidate import promote_candidate
+    from mlflow.exceptions import MlflowException
+
+    class Version:
+        version = "4"
+        tags = {"retraining_role": "candidate"}
+
+    class Client:
+        def __init__(self):
+            self.alias_updates = []
+
+        def get_model_version(self, _name, _version):
+            return Version()
+
+        def get_model_version_by_alias(self, _name, alias):
+            if alias == "candidate":
+                return Version()
+            raise MlflowException("alias missing")
+
+        def set_registered_model_alias(self, *args):
+            self.alias_updates.append(args)
+
+    client = Client()
+    result = promote_candidate("4", dry_run=True, client=client)
+    assert result["dry_run"] is True
+    assert result["promoted"] is False
+    assert client.alias_updates == []
+
+
+def test_natural_baseline_windows_threshold_and_shifted_stress():
+    rng = np.random.default_rng(12)
+    names = ["TransactionAmt", "txn_count_last_1h", "txn_count_last_24h", "device_change_vs_previous", "D1"]
+    windows = []
+    for offset in (0.0, 0.1, 0.2, 0.3):
+        windows.append(pd.DataFrame({
+            "TransactionAmt": rng.normal(10 + offset, 1, 300),
+            "txn_count_last_1h": rng.poisson(1 + offset, 300).astype(float),
+            "txn_count_last_24h": rng.poisson(3 + offset, 300).astype(float),
+            "device_change_vs_previous": rng.binomial(1, 0.1 + offset / 10, 300).astype(float),
+            "D1": rng.normal(5 + offset, 2, 300),
+        }))
+    baseline = natural_baseline_from_windows(windows, names)
+    assert baseline["comparison_count"] == 3
+    assert np.isclose(baseline["mean"], np.mean(baseline["drift_shares"]))
+    assert np.isclose(baseline["max"], np.max(baseline["drift_shares"]))
+    assert np.isclose(baseline["p95"], np.percentile(baseline["drift_shares"], 95))
+    threshold = natural_trigger_threshold(baseline["max"], 0.1)
+    assert threshold > baseline["max"]
+
+    shifted = build_shifted_test(windows[-1], names, stress_multiplier=100.0)
+    summary = _evidently_summary(_run_evidently(windows[-2], shifted, names), 300, 300)
+    assert summary["drift_share"] > threshold
+    assert any("cumulative_by_construction" in row["tags"] for row in summary["drifted_column_details"])
+
+
+def test_expanded_window_sizes_and_estimator_scaling():
+    from src.monitoring.retrain import expanded_n_estimators, expanded_window_sizes
+
+    sizes = expanded_window_sizes(90_000, 30_000, 30_000)
+    assert sizes == {
+        "original_train_rows": 90_000,
+        "validation_rows_added": 30_000,
+        "expanded_train_rows": 120_000,
+        "test_rows": 30_000,
+    }
+    assert expanded_n_estimators(402, sizes["expanded_train_rows"], sizes["original_train_rows"]) == 536

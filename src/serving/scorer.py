@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import time
 from pathlib import Path
@@ -16,6 +17,24 @@ from mlflow.tracking import MlflowClient
 
 from src.common.config import FEATURE_REPO_DIR, GNN_ARTIFACT_DIR, XGB_ARTIFACT_DIR
 from src.common.model_registry import serving_model_version
+
+_FEAST_DEPRECATION = (
+    "_list_feature_views will make breaking changes. Please use _list_batch_feature_views instead. "
+    "_list_feature_views will behave like _list_all_feature_views in the future."
+)
+
+
+class _FeastDeprecationFilter(logging.Filter):
+    """Suppress only Feast 0.40's per-query API migration warning."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        return record.getMessage() != _FEAST_DEPRECATION
+
+
+def _install_feast_deprecation_filter() -> None:
+    root = logging.getLogger()
+    if not any(isinstance(item, _FeastDeprecationFilter) for item in root.filters):
+        root.addFilter(_FeastDeprecationFilter())
 
 
 class FraudScorer:
@@ -34,6 +53,7 @@ class FraudScorer:
         feature_repo: Path = FEATURE_REPO_DIR,
         gnn_artifact_dir: Path = GNN_ARTIFACT_DIR,
     ) -> None:
+        _install_feast_deprecation_filter()
         if model_source not in {"local", "registry"}:
             raise ValueError("model_source must be 'local' or 'registry'")
         self.artifact_dir = Path(artifact_dir)

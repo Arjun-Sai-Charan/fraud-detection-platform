@@ -6,10 +6,3227 @@
     "validation": 0.0172,
     "test": 0.03666666666666667
   },
+  "natural_baseline": {
+    "window_size_rows": 15000,
+    "window_count": 10,
+    "comparison_count": 9,
+    "drift_shares": [
+      0.21153846153846154,
+      0.23076923076923078,
+      0.3076923076923077,
+      0.28846153846153844,
+      0.11538461538461539,
+      0.057692307692307696,
+      0.15384615384615385,
+      0.5,
+      0.07692307692307693
+    ],
+    "mean": 0.2158119658119658,
+    "max": 0.5,
+    "p95": 0.423076923076923,
+    "threshold_rule": "natural baseline maximum + 0.10, capped at 1.0",
+    "threshold_margin": 0.1,
+    "trigger_threshold": 0.6,
+    "comparisons": [
+      {
+        "drift_share": 0.21153846153846154,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 11,
+        "drifted_columns": [
+          "D1",
+          "D10",
+          "D11",
+          "D15",
+          "D4",
+          "D5",
+          "D7",
+          "R_emaildomain_encoded",
+          "txn_count_last_1h",
+          "txn_count_last_24h",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "D1",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D10",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D11",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D15",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D4",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D5",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D7",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "txn_count_last_1h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "txn_count_last_24h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "K-S p_value",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.035146141471388226,
+            "drift_detected": false
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02523108008834612,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.033302636583408346,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08925299559410844,
+            "drift_detected": false
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06460760324933003,
+            "drift_detected": false
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04974594724012643,
+            "drift_detected": false
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.031322070653777914,
+            "drift_detected": false
+          },
+          "C3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04148023413051308,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01380735368638454,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.051879951493424586,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.037281982008952996,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08642235074250457,
+            "drift_detected": false
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.017247804190863202,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05987134501844032,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12720833742212634,
+            "drift_detected": true
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.11246840904972105,
+            "drift_detected": true
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.3137396228367676,
+            "drift_detected": true
+          },
+          "D12": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.5414208855783398,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.8864255770969232,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.37244555488516523,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.30035822858349953,
+            "drift_detected": true
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07745085697750262,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03506917921813938,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.24890327229485187,
+            "drift_detected": true
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.11099880546208947,
+            "drift_detected": true
+          },
+          "D6": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.25287726776354896,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 3.5501141956062857e-12,
+            "drift_detected": true
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07697118291388672,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05363831347853953,
+            "drift_detected": false
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02583712103582254,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.025999153789899098,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.025857506957041053,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03687245370242779,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02326255254175035,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.05991819407316878,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02046819733160257,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.019791649880691837,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.019904072717305547,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01804492304984164,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.07998071390125555,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1210047301049605,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04663189356480493,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05223817042571964,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03963651459290772,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.07640727564873424,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.04898680927662779,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.07689513993948137,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1169103306167959,
+            "drift_detected": true
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12444686696452739,
+            "drift_detected": true
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.45895044347530595,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 0,
+        "current_window": 1
+      },
+      {
+        "drift_share": 0.23076923076923078,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 12,
+        "drifted_columns": [
+          "C1",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C2",
+          "C4",
+          "C6",
+          "C7",
+          "C8",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "C1",
+            "tags": []
+          },
+          {
+            "name": "C10",
+            "tags": []
+          },
+          {
+            "name": "C11",
+            "tags": []
+          },
+          {
+            "name": "C12",
+            "tags": []
+          },
+          {
+            "name": "C13",
+            "tags": []
+          },
+          {
+            "name": "C14",
+            "tags": []
+          },
+          {
+            "name": "C2",
+            "tags": []
+          },
+          {
+            "name": "C4",
+            "tags": []
+          },
+          {
+            "name": "C6",
+            "tags": []
+          },
+          {
+            "name": "C7",
+            "tags": []
+          },
+          {
+            "name": "C8",
+            "tags": []
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "K-S p_value",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 1.2970177135300964,
+            "drift_detected": true
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 4.20017991522156,
+            "drift_detected": true
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 1.3391093465237722,
+            "drift_detected": true
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 9.801989810473117,
+            "drift_detected": true
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.3951013194649261,
+            "drift_detected": true
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.6958352406163196,
+            "drift_detected": true
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 1.818042870636773,
+            "drift_detected": true
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.005947725857916545,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 1.5364302255839197,
+            "drift_detected": true
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.018215562586452932,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.9860520710741887,
+            "drift_detected": true
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 11.19975834296921,
+            "drift_detected": true
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 3.2941366126756817,
+            "drift_detected": true
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.016022864365971307,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05834951202638132,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.024206429993123158,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.027677391627630263,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07848858223115779,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09957489642236149,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09541014404480844,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019790188487919726,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.021378283470536837,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.058016302980019224,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02444969193175437,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04532418198466743,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04365085627912372,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.22193300259997562,
+            "drift_detected": false
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03265260298237355,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.061436895831236654,
+            "drift_detected": false
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.029082640913274664,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.029201323642364618,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02925678878324438,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.023525821974341773,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0203621337634893,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.05355570109737096,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.023800842239734044,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.023817832336076566,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02500892857067941,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.023290995594379298,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.06242745029053824,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06261401958070817,
+            "drift_detected": false
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06407523895107528,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06437180463322391,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.018970566815448852,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02127148608098856,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.051081429564629605,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.05398168557809904,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.004893112667722446,
+            "drift_detected": false
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.025582697081738905,
+            "drift_detected": false
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.29508537755940223,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 1,
+        "current_window": 2
+      },
+      {
+        "drift_share": 0.3076923076923077,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 16,
+        "drifted_columns": [
+          "C1",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C2",
+          "C4",
+          "C6",
+          "C7",
+          "C8",
+          "D12",
+          "D9",
+          "txn_count_last_1h",
+          "txn_count_last_24h",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "C1",
+            "tags": []
+          },
+          {
+            "name": "C10",
+            "tags": []
+          },
+          {
+            "name": "C11",
+            "tags": []
+          },
+          {
+            "name": "C12",
+            "tags": []
+          },
+          {
+            "name": "C13",
+            "tags": []
+          },
+          {
+            "name": "C14",
+            "tags": []
+          },
+          {
+            "name": "C2",
+            "tags": []
+          },
+          {
+            "name": "C4",
+            "tags": []
+          },
+          {
+            "name": "C6",
+            "tags": []
+          },
+          {
+            "name": "C7",
+            "tags": []
+          },
+          {
+            "name": "C8",
+            "tags": []
+          },
+          {
+            "name": "D12",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D9",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "txn_count_last_1h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "txn_count_last_24h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "K-S p_value",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.5247333174311533,
+            "drift_detected": true
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.37661383893509315,
+            "drift_detected": true
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.45680873816092227,
+            "drift_detected": true
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.4438477828509872,
+            "drift_detected": true
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.36202992821705804,
+            "drift_detected": true
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.44543080707748156,
+            "drift_detected": true
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.40630979293439023,
+            "drift_detected": true
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.009702530371820865,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.44700913337298964,
+            "drift_detected": true
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01089208245409783,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.4451335551398349,
+            "drift_detected": true
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.43066579106804687,
+            "drift_detected": true
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.46109283069784346,
+            "drift_detected": true
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.017502679937035026,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.00828707651494402,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03708128528801183,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019326638673067782,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.13144521987578978,
+            "drift_detected": true
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05482917991062612,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07384090503969228,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01396113570826866,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.010264803851925611,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.017519895252857378,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03724249704715706,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0187321990426281,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06321458943786004,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.8581896369313557,
+            "drift_detected": false
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0501326849651427,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1346675000101006,
+            "drift_detected": true
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.011324347620084083,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.011324481072811655,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.012265344432158197,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.011706551082485884,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.012274713999837013,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.021266218261763645,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.003813585887627654,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.003181674336334877,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.007000166831416485,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.031616997042975506,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.06846510293190894,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08859056769508078,
+            "drift_detected": false
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0699966768167148,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05761006965913282,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.024223280425494625,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.012196009617933018,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02825914383728775,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.020610374478856268,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10836485280024895,
+            "drift_detected": true
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.16687707824711484,
+            "drift_detected": true
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.22471767192511602,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 2,
+        "current_window": 3
+      },
+      {
+        "drift_share": 0.28846153846153844,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 15,
+        "drifted_columns": [
+          "C1",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C2",
+          "C4",
+          "C6",
+          "C7",
+          "C8",
+          "R_emaildomain_encoded",
+          "txn_count_last_1h",
+          "txn_count_last_24h",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "C1",
+            "tags": []
+          },
+          {
+            "name": "C10",
+            "tags": []
+          },
+          {
+            "name": "C11",
+            "tags": []
+          },
+          {
+            "name": "C12",
+            "tags": []
+          },
+          {
+            "name": "C13",
+            "tags": []
+          },
+          {
+            "name": "C14",
+            "tags": []
+          },
+          {
+            "name": "C2",
+            "tags": []
+          },
+          {
+            "name": "C4",
+            "tags": []
+          },
+          {
+            "name": "C6",
+            "tags": []
+          },
+          {
+            "name": "C7",
+            "tags": []
+          },
+          {
+            "name": "C8",
+            "tags": []
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "txn_count_last_1h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "txn_count_last_24h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "K-S p_value",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2143472670959684,
+            "drift_detected": true
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21931526787392364,
+            "drift_detected": true
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21714888959789394,
+            "drift_detected": true
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2164449474490222,
+            "drift_detected": true
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2208927619820383,
+            "drift_detected": true
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21912780211356053,
+            "drift_detected": true
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21507775606532198,
+            "drift_detected": true
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.014460508983860993,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21647119309267224,
+            "drift_detected": true
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01746658227919523,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2179691678375564,
+            "drift_detected": true
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2171869339342258,
+            "drift_detected": true
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.21765754549581146,
+            "drift_detected": true
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03061787667608524,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.018314022513582762,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08260327214159321,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08886154811431957,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0615862167611386,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04987022825872696,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04583628488879434,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019007103635564487,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.049195716391420216,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01979967501375794,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.035564577392247367,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.014473562783421351,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08579522658347838,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "K-S p_value",
+            "drift_score": 0.05889975726135808,
+            "drift_detected": false
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05894314884788563,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0936958359564588,
+            "drift_detected": false
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02526270278175124,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.025263084881583592,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02576773249971038,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.04458893862919462,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.041498853916551906,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03302385590928863,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.020345956356476253,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.020372325827539773,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02035409365866359,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03385267081284689,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.041364531199984955,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.11112238766872998,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0593078071608857,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06466975899481556,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.008995859488201039,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.007564676704073205,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0283956741233637,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03177239138277577,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.13037353313291591,
+            "drift_detected": true
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.22085544244669583,
+            "drift_detected": true
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.2935675455846076,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 3,
+        "current_window": 4
+      },
+      {
+        "drift_share": 0.11538461538461539,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 6,
+        "drifted_columns": [
+          "D14",
+          "D7",
+          "D9",
+          "R_emaildomain_encoded",
+          "txn_count_last_24h",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "D14",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D7",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D9",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "txn_count_last_24h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06795490536982689,
+            "drift_detected": false
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06734528555057474,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06690852869882945,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03096490326981547,
+            "drift_detected": false
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.027365101561735647,
+            "drift_detected": false
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06488031482244216,
+            "drift_detected": false
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0660171025742507,
+            "drift_detected": false
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.020388840819435827,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0745279201007803,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.021561578541490246,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06627445609387568,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03238442789570909,
+            "drift_detected": false
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0712646798699064,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.026656404423497756,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.032822444981011965,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019606572021743318,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.018434048379422183,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.017591325346067926,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.037207702509552056,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.11716529434462898,
+            "drift_detected": true
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.012393396283281474,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0362906464577162,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.023543073160600447,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.015157005987029456,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07546031666460525,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04708960473211375,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12156289334871997,
+            "drift_detected": true
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04240318086585217,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12216717738676892,
+            "drift_detected": true
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0295271791074698,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02965921580213138,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.030304275480729184,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.028166046164712345,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03171186820714579,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.04534680630171999,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02486828285348416,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.024950195793083565,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.024946723492764517,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.050739359443618307,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0880309952010625,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12093073977473054,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09937856428306907,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03590172332516791,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03195640941934012,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03754876550173256,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02522887833669329,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0004135029120610106,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08203027016643594,
+            "drift_detected": false
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10100880586534271,
+            "drift_detected": true
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.057781329807032766,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1233960566102228,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 4,
+        "current_window": 5
+      },
+      {
+        "drift_share": 0.057692307692307696,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 3,
+        "drifted_columns": [
+          "D9",
+          "R_emaildomain_encoded",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "D9",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.034044889510213255,
+            "drift_detected": false
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.026258775742111398,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.033631566699355304,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019197970381476633,
+            "drift_detected": false
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.044623634984338884,
+            "drift_detected": false
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03747119537796666,
+            "drift_detected": false
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.033562876947628446,
+            "drift_detected": false
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02282629897936669,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.026598803230694853,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.027253342304234783,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03398599290173668,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.020259192844184107,
+            "drift_detected": false
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.024635174077289546,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03646398304168506,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.054956553092586784,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.041440794916646734,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.068357460608629,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04415905981792512,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05867825587337071,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.019587486581662084,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05055257641235934,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.047868726864295275,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04232278984626831,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.039723153149969215,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.021581092208072215,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06747710293379906,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.035624123675339424,
+            "drift_detected": false
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04904026904383091,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1488858150730506,
+            "drift_detected": true
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.005145907638369082,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.007266841578565694,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.01122887128451185,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.026240163251125048,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.030459706593643613,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.005497039945092123,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.00706318588978847,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.007220826808293119,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.008134314557704988,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04954319685687248,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.026529391348279575,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10974177952672873,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.054100261375292516,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02922566412221667,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.016497229722723956,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02759064159530588,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.023247449831709035,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.014238274408302283,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04889491741721574,
+            "drift_detected": false
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09468323499056909,
+            "drift_detected": false
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03919248730979339,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1450308471347123,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 5,
+        "current_window": 6
+      },
+      {
+        "drift_share": 0.15384615384615385,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 8,
+        "drifted_columns": [
+          "D14",
+          "D6",
+          "D7",
+          "D9",
+          "R_emaildomain_encoded",
+          "TransactionAmt",
+          "amount_to_past_mean",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "D14",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D6",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D7",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D9",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "TransactionAmt",
+            "tags": []
+          },
+          {
+            "name": "amount_to_past_mean",
+            "tags": []
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07845573912021438,
+            "drift_detected": false
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07843569262210177,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07812857372036157,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02400209340619075,
+            "drift_detected": false
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.060305033977462424,
+            "drift_detected": false
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0776239923499086,
+            "drift_detected": false
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07937567603590069,
+            "drift_detected": false
+          },
+          "C3": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.00620811953963687,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07870989271491974,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.013483567558661348,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07790995888048553,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02731784598841483,
+            "drift_detected": false
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0805502548159116,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.022999182144238264,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.030441863037822755,
+            "drift_detected": false
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.012077481701095587,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06027033185864807,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03284425408924519,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08005732294964603,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10706246470366677,
+            "drift_detected": true
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01628342313876516,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.02644781655368369,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.022517767837937377,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.01574882967551998,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05106515540212166,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10731978607723897,
+            "drift_detected": true
+          },
+          "D7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10026148286274789,
+            "drift_detected": true
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06375788716338303,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1415362171886209,
+            "drift_detected": true
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0294091172724841,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.029803347352272067,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.02950087833066866,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.058366663229179744,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0529317891304354,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.049341819910522465,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0070338744720885235,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.011786086006475906,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.010181382931847352,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04664195942320416,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.07366406506665787,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1573345206858942,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.14015726820895533,
+            "drift_detected": true
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10956844932778584,
+            "drift_detected": true
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.009978394665062689,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.008682952738840805,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.04204709015774197,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.011242176376292176,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03652155280582018,
+            "drift_detected": false
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04421790171314217,
+            "drift_detected": false
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.020635115866059768,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1193286440806747,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 6,
+        "current_window": 7
+      },
+      {
+        "drift_share": 0.5,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": true,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 26,
+        "drifted_columns": [
+          "C1",
+          "C12",
+          "C13",
+          "C14",
+          "C2",
+          "C5",
+          "C7",
+          "C9",
+          "D1",
+          "D13",
+          "D5",
+          "D6",
+          "D7",
+          "D9",
+          "M1_encoded",
+          "M2_encoded",
+          "M3_encoded",
+          "M4_encoded",
+          "M5_encoded",
+          "M6_encoded",
+          "ProductCD_encoded",
+          "R_emaildomain_encoded",
+          "TransactionAmt",
+          "amount_to_past_mean",
+          "device_change_vs_previous",
+          "uid_prior_txn_count"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "C1",
+            "tags": []
+          },
+          {
+            "name": "C12",
+            "tags": []
+          },
+          {
+            "name": "C13",
+            "tags": []
+          },
+          {
+            "name": "C14",
+            "tags": []
+          },
+          {
+            "name": "C2",
+            "tags": []
+          },
+          {
+            "name": "C5",
+            "tags": []
+          },
+          {
+            "name": "C7",
+            "tags": []
+          },
+          {
+            "name": "C9",
+            "tags": []
+          },
+          {
+            "name": "D1",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D13",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D5",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D6",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D7",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "D9",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "M1_encoded",
+            "tags": []
+          },
+          {
+            "name": "M2_encoded",
+            "tags": []
+          },
+          {
+            "name": "M3_encoded",
+            "tags": []
+          },
+          {
+            "name": "M4_encoded",
+            "tags": []
+          },
+          {
+            "name": "M5_encoded",
+            "tags": []
+          },
+          {
+            "name": "M6_encoded",
+            "tags": []
+          },
+          {
+            "name": "ProductCD_encoded",
+            "tags": []
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "TransactionAmt",
+            "tags": []
+          },
+          {
+            "name": "amount_to_past_mean",
+            "tags": []
+          },
+          {
+            "name": "device_change_vs_previous",
+            "tags": []
+          },
+          {
+            "name": "uid_prior_txn_count",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10769292845136053,
+            "drift_detected": true
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0574537431761434,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09584878041168911,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1326658409030537,
+            "drift_detected": true
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.17049751522686685,
+            "drift_detected": true
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.11934702743669895,
+            "drift_detected": true
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10601850127586343,
+            "drift_detected": true
+          },
+          "C3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08768297079613818,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.025628253596050685,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.14185397009991263,
+            "drift_detected": true
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0986573594623913,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.15596753541649047,
+            "drift_detected": true
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.054144047769717006,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1760369647740989,
+            "drift_detected": true
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.20634617201796293,
+            "drift_detected": true
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.029881281303056333,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03614587402398541,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.023586646617317564,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.10198809166980097,
+            "drift_detected": true
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.057039838854251804,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.026546338523917017,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06823612265900736,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0884234164262934,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.018896547478656305,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1449360200768124,
+            "drift_detected": true
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12828815781461805,
+            "drift_detected": true
+          },
+          "D7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.3100465130695336,
+            "drift_detected": true
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08127385093296019,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1022518329327055,
+            "drift_detected": true
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.12782174105681698,
+            "drift_detected": true
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.1281704465321076,
+            "drift_detected": true
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.1278926864773728,
+            "drift_detected": true
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.16702876096942224,
+            "drift_detected": true
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.1356312657680289,
+            "drift_detected": true
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.2086011494667395,
+            "drift_detected": true
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.08734305939653254,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.08743859298715681,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.08726854886135295,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04480387342903028,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.28183623637192556,
+            "drift_detected": true
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.42123871785866596,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.27922382596546386,
+            "drift_detected": true
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.24697074676498074,
+            "drift_detected": true
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0723228919080872,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.09262795571704557,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.17236498588887603,
+            "drift_detected": true
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.043953122313245746,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.021390582430214536,
+            "drift_detected": false
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06560140212537491,
+            "drift_detected": false
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03335904255162802,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1872118032388572,
+            "drift_detected": true
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 7,
+        "current_window": 8
+      },
+      {
+        "drift_share": 0.07692307692307693,
+        "evidently_drift_share_threshold": 0.5,
+        "dataset_drift": false,
+        "number_of_columns": 52,
+        "number_of_drifted_columns": 4,
+        "drifted_columns": [
+          "D1",
+          "R_emaildomain_encoded",
+          "txn_count_last_1h",
+          "txn_count_last_24h"
+        ],
+        "drifted_column_details": [
+          {
+            "name": "D1",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "R_emaildomain_encoded",
+            "tags": []
+          },
+          {
+            "name": "txn_count_last_1h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          },
+          {
+            "name": "txn_count_last_24h",
+            "tags": [
+              "cumulative_by_construction"
+            ]
+          }
+        ],
+        "test_names": [
+          "Jensen-Shannon distance",
+          "Wasserstein distance (normed)"
+        ],
+        "column_tests": {
+          "C1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.040685901347887,
+            "drift_detected": false
+          },
+          "C10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.026602838260016394,
+            "drift_detected": false
+          },
+          "C11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.038590600174554096,
+            "drift_detected": false
+          },
+          "C12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.037981039746832035,
+            "drift_detected": false
+          },
+          "C13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.060646440061506185,
+            "drift_detected": false
+          },
+          "C14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.044843191041912166,
+            "drift_detected": false
+          },
+          "C2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03267466978461969,
+            "drift_detected": false
+          },
+          "C3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.008726556388707197,
+            "drift_detected": false
+          },
+          "C4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.013540100159589289,
+            "drift_detected": false
+          },
+          "C5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.052771785318998794,
+            "drift_detected": false
+          },
+          "C6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04094126178119677,
+            "drift_detected": false
+          },
+          "C7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04637575835617316,
+            "drift_detected": false
+          },
+          "C8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.021814188059123742,
+            "drift_detected": false
+          },
+          "C9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0589650849273044,
+            "drift_detected": false
+          },
+          "D1": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.1268775981316636,
+            "drift_detected": true
+          },
+          "D10": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09064024856262051,
+            "drift_detected": false
+          },
+          "D11": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.055926210282685296,
+            "drift_detected": false
+          },
+          "D12": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.06691054007805827,
+            "drift_detected": false
+          },
+          "D13": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.028392134115429804,
+            "drift_detected": false
+          },
+          "D14": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08738277654299986,
+            "drift_detected": false
+          },
+          "D15": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.09034958023478315,
+            "drift_detected": false
+          },
+          "D2": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07752486946869155,
+            "drift_detected": false
+          },
+          "D3": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.037824753652830265,
+            "drift_detected": false
+          },
+          "D4": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.08809693811768607,
+            "drift_detected": false
+          },
+          "D5": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.024336670280126566,
+            "drift_detected": false
+          },
+          "D6": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.0452789657220167,
+            "drift_detected": false
+          },
+          "D7": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.03569483508437431,
+            "drift_detected": false
+          },
+          "D8": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.07908137672137257,
+            "drift_detected": false
+          },
+          "D9": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.020444229484394397,
+            "drift_detected": false
+          },
+          "M1_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.05582147316746169,
+            "drift_detected": false
+          },
+          "M2_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.056230875111966894,
+            "drift_detected": false
+          },
+          "M3_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0561882380796739,
+            "drift_detected": false
+          },
+          "M4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.04728325819623273,
+            "drift_detected": false
+          },
+          "M5_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03755755274083681,
+            "drift_detected": false
+          },
+          "M6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.08132027113564008,
+            "drift_detected": false
+          },
+          "M7_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.041240256751476016,
+            "drift_detected": false
+          },
+          "M8_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.03830792906009261,
+            "drift_detected": false
+          },
+          "M9_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.037769641913284455,
+            "drift_detected": false
+          },
+          "P_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.047666840901114435,
+            "drift_detected": false
+          },
+          "ProductCD_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.09107805200792256,
+            "drift_detected": false
+          },
+          "R_emaildomain_encoded": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.20334516603245426,
+            "drift_detected": true
+          },
+          "TransactionAmt": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.04763331530403607,
+            "drift_detected": false
+          },
+          "amount_to_past_mean": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05551494436319216,
+            "drift_detected": false
+          },
+          "card4_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.021228141479451384,
+            "drift_detected": false
+          },
+          "card6_encoded": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0353641699725842,
+            "drift_detected": false
+          },
+          "device_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.08295167903746567,
+            "drift_detected": false
+          },
+          "is_first_txn_for_uid": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.01777800172693497,
+            "drift_detected": false
+          },
+          "location_change_vs_previous": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.0,
+            "drift_detected": false
+          },
+          "txn_count_last_1h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.12706405570473525,
+            "drift_detected": true
+          },
+          "txn_count_last_24h": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.14580080847874372,
+            "drift_detected": true
+          },
+          "uid_is_hub": {
+            "stattest_name": "Jensen-Shannon distance",
+            "drift_score": 0.005939632933587618,
+            "drift_detected": false
+          },
+          "uid_prior_txn_count": {
+            "stattest_name": "Wasserstein distance (normed)",
+            "drift_score": 0.05412102951666239,
+            "drift_detected": false
+          }
+        },
+        "reference_rows": 15000,
+        "current_rows": 15000,
+        "reference_window": 8,
+        "current_window": 9
+      }
+    ],
+    "window_boundaries": [
+      {
+        "window": 0,
+        "start_transaction_id": 2987000,
+        "end_transaction_id": 3001999,
+        "start_event_timestamp": "2017-12-01 00:00:00+00:00",
+        "end_event_timestamp": "2017-12-04 20:01:32+00:00"
+      },
+      {
+        "window": 1,
+        "start_transaction_id": 3002000,
+        "end_transaction_id": 3016999,
+        "start_event_timestamp": "2017-12-04 20:01:34+00:00",
+        "end_event_timestamp": "2017-12-08 18:32:59+00:00"
+      },
+      {
+        "window": 2,
+        "start_transaction_id": 3017000,
+        "end_transaction_id": 3031999,
+        "start_event_timestamp": "2017-12-08 18:33:21+00:00",
+        "end_event_timestamp": "2017-12-12 15:14:34+00:00"
+      },
+      {
+        "window": 3,
+        "start_transaction_id": 3032000,
+        "end_transaction_id": 3046999,
+        "start_event_timestamp": "2017-12-12 15:14:43+00:00",
+        "end_event_timestamp": "2017-12-15 20:48:33+00:00"
+      },
+      {
+        "window": 4,
+        "start_transaction_id": 3047000,
+        "end_transaction_id": 3061999,
+        "start_event_timestamp": "2017-12-15 20:48:35+00:00",
+        "end_event_timestamp": "2017-12-19 00:31:04+00:00"
+      },
+      {
+        "window": 5,
+        "start_transaction_id": 3062000,
+        "end_transaction_id": 3076999,
+        "start_event_timestamp": "2017-12-19 00:31:32+00:00",
+        "end_event_timestamp": "2017-12-21 19:21:09+00:00"
+      },
+      {
+        "window": 6,
+        "start_transaction_id": 3077000,
+        "end_transaction_id": 3091999,
+        "start_event_timestamp": "2017-12-21 19:21:21+00:00",
+        "end_event_timestamp": "2017-12-24 01:28:29+00:00"
+      },
+      {
+        "window": 7,
+        "start_transaction_id": 3092000,
+        "end_transaction_id": 3106999,
+        "start_event_timestamp": "2017-12-24 01:28:32+00:00",
+        "end_event_timestamp": "2017-12-27 01:12:44+00:00"
+      },
+      {
+        "window": 8,
+        "start_transaction_id": 3107000,
+        "end_transaction_id": 3121999,
+        "start_event_timestamp": "2017-12-27 01:13:06+00:00",
+        "end_event_timestamp": "2017-12-31 04:06:24+00:00"
+      },
+      {
+        "window": 9,
+        "start_transaction_id": 3122000,
+        "end_transaction_id": 3136999,
+        "start_event_timestamp": "2017-12-31 04:07:10+00:00",
+        "end_event_timestamp": "2018-01-04 19:16:48+00:00"
+      }
+    ]
+  },
+  "drift_share_threshold": 0.6,
   "validation_data_drift": {
     "drift_share": 0.40384615384615385,
-    "evidently_drift_share_threshold": 0.3,
-    "dataset_drift": true,
+    "evidently_drift_share_threshold": 0.5,
+    "dataset_drift": false,
     "number_of_columns": 52,
     "number_of_drifted_columns": 21,
     "drifted_columns": [
@@ -34,6 +3251,104 @@
       "txn_count_last_1h",
       "txn_count_last_24h",
       "uid_prior_txn_count"
+    ],
+    "drifted_column_details": [
+      {
+        "name": "C1",
+        "tags": []
+      },
+      {
+        "name": "C10",
+        "tags": []
+      },
+      {
+        "name": "C11",
+        "tags": []
+      },
+      {
+        "name": "C12",
+        "tags": []
+      },
+      {
+        "name": "C13",
+        "tags": []
+      },
+      {
+        "name": "C14",
+        "tags": []
+      },
+      {
+        "name": "C2",
+        "tags": []
+      },
+      {
+        "name": "C4",
+        "tags": []
+      },
+      {
+        "name": "C6",
+        "tags": []
+      },
+      {
+        "name": "C7",
+        "tags": []
+      },
+      {
+        "name": "C8",
+        "tags": []
+      },
+      {
+        "name": "D1",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D5",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D7",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "M6_encoded",
+        "tags": []
+      },
+      {
+        "name": "ProductCD_encoded",
+        "tags": []
+      },
+      {
+        "name": "R_emaildomain_encoded",
+        "tags": []
+      },
+      {
+        "name": "device_change_vs_previous",
+        "tags": []
+      },
+      {
+        "name": "txn_count_last_1h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "txn_count_last_24h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "uid_prior_txn_count",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      }
     ],
     "test_names": [
       "Jensen-Shannon distance",
@@ -304,16 +3619,18 @@
     "reference_rows": 90000,
     "current_rows": 30000,
     "report_name": "validation_data_drift",
-    "trigger_threshold": 0.3,
+    "trigger_threshold": 0.6,
     "reference_split": "train",
     "current_split": "validation",
     "reference_fraud_rate": 0.026155555555555557,
-    "current_fraud_rate": 0.0172
+    "current_fraud_rate": 0.0172,
+    "trigger_eligible": false,
+    "informational_only_reason": "vs-TRAIN comparison spans multiple natural windows"
   },
   "test_data_drift": {
     "drift_share": 0.40384615384615385,
-    "evidently_drift_share_threshold": 0.3,
-    "dataset_drift": true,
+    "evidently_drift_share_threshold": 0.5,
+    "dataset_drift": false,
     "number_of_columns": 52,
     "number_of_drifted_columns": 21,
     "drifted_columns": [
@@ -338,6 +3655,110 @@
       "txn_count_last_24h",
       "uid_is_hub",
       "uid_prior_txn_count"
+    ],
+    "drifted_column_details": [
+      {
+        "name": "C1",
+        "tags": []
+      },
+      {
+        "name": "C10",
+        "tags": []
+      },
+      {
+        "name": "C11",
+        "tags": []
+      },
+      {
+        "name": "C12",
+        "tags": []
+      },
+      {
+        "name": "C14",
+        "tags": []
+      },
+      {
+        "name": "C2",
+        "tags": []
+      },
+      {
+        "name": "C4",
+        "tags": []
+      },
+      {
+        "name": "C6",
+        "tags": []
+      },
+      {
+        "name": "C7",
+        "tags": []
+      },
+      {
+        "name": "C8",
+        "tags": []
+      },
+      {
+        "name": "D1",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D6",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D7",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D8",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D9",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "ProductCD_encoded",
+        "tags": []
+      },
+      {
+        "name": "is_first_txn_for_uid",
+        "tags": []
+      },
+      {
+        "name": "txn_count_last_1h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "txn_count_last_24h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "uid_is_hub",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "uid_prior_txn_count",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      }
     ],
     "test_names": [
       "Jensen-Shannon distance",
@@ -608,42 +4029,49 @@
     "reference_rows": 90000,
     "current_rows": 30000,
     "report_name": "test_data_drift",
-    "trigger_threshold": 0.3,
+    "trigger_threshold": 0.6,
     "reference_split": "train",
     "current_split": "test",
     "reference_fraud_rate": 0.026155555555555557,
-    "current_fraud_rate": 0.03666666666666667
+    "current_fraud_rate": 0.03666666666666667,
+    "trigger_eligible": false,
+    "informational_only_reason": "vs-TRAIN comparison spans multiple natural windows"
   },
-  "shifted_test_data_drift": {
-    "drift_share": 0.4423076923076923,
-    "evidently_drift_share_threshold": 0.3,
-    "dataset_drift": true,
+  "recent_window_drift": {
+    "drift_share": 0.07692307692307693,
+    "evidently_drift_share_threshold": 0.5,
+    "dataset_drift": false,
     "number_of_columns": 52,
-    "number_of_drifted_columns": 23,
+    "number_of_drifted_columns": 4,
     "drifted_columns": [
-      "C1",
-      "C10",
-      "C11",
-      "C12",
-      "C14",
-      "C2",
-      "C4",
-      "C6",
-      "C7",
-      "C8",
       "D1",
-      "D6",
-      "D7",
-      "D8",
-      "D9",
-      "ProductCD_encoded",
-      "TransactionAmt",
-      "device_change_vs_previous",
-      "is_first_txn_for_uid",
+      "R_emaildomain_encoded",
       "txn_count_last_1h",
-      "txn_count_last_24h",
-      "uid_is_hub",
-      "uid_prior_txn_count"
+      "txn_count_last_24h"
+    ],
+    "drifted_column_details": [
+      {
+        "name": "D1",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "R_emaildomain_encoded",
+        "tags": []
+      },
+      {
+        "name": "txn_count_last_1h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "txn_count_last_24h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      }
     ],
     "test_names": [
       "Jensen-Shannon distance",
@@ -652,238 +4080,238 @@
     "column_tests": {
       "C1": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.10813411504938103,
-        "drift_detected": true
+        "drift_score": 0.040685901347887,
+        "drift_detected": false
       },
       "C10": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11467400009314138,
-        "drift_detected": true
+        "drift_score": 0.026602838260016394,
+        "drift_detected": false
       },
       "C11": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11142491865789289,
-        "drift_detected": true
+        "drift_score": 0.038590600174554096,
+        "drift_detected": false
       },
       "C12": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.1070887024295891,
-        "drift_detected": true
+        "drift_score": 0.037981039746832035,
+        "drift_detected": false
       },
       "C13": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.08832568718129134,
+        "drift_score": 0.060646440061506185,
         "drift_detected": false
       },
       "C14": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.10729477339230237,
-        "drift_detected": true
+        "drift_score": 0.044843191041912166,
+        "drift_detected": false
       },
       "C2": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11281207619310689,
-        "drift_detected": true
+        "drift_score": 0.03267466978461969,
+        "drift_detected": false
       },
       "C3": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.08456470006739193,
+        "drift_score": 0.008726556388707197,
         "drift_detected": false
       },
       "C4": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11796329466803582,
-        "drift_detected": true
+        "drift_score": 0.013540100159589289,
+        "drift_detected": false
       },
       "C5": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.0659531382815537,
+        "drift_score": 0.052771785318998794,
         "drift_detected": false
       },
       "C6": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.111366041222825,
-        "drift_detected": true
+        "drift_score": 0.04094126178119677,
+        "drift_detected": false
       },
       "C7": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.10762724685896437,
-        "drift_detected": true
+        "drift_score": 0.04637575835617316,
+        "drift_detected": false
       },
       "C8": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11226867156500091,
-        "drift_detected": true
+        "drift_score": 0.021814188059123742,
+        "drift_detected": false
       },
       "C9": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.07764370451899215,
+        "drift_score": 0.0589650849273044,
         "drift_detected": false
       },
       "D1": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.10327452228092489,
+        "drift_score": 0.1268775981316636,
         "drift_detected": true
       },
       "D10": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.040983678801551106,
+        "drift_score": 0.09064024856262051,
         "drift_detected": false
       },
       "D11": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.030888830750962843,
+        "drift_score": 0.055926210282685296,
         "drift_detected": false
       },
       "D12": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.05902945648727634,
+        "drift_score": 0.06691054007805827,
         "drift_detected": false
       },
       "D13": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.054096573024866396,
+        "drift_score": 0.028392134115429804,
         "drift_detected": false
       },
       "D14": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.0893564286341906,
+        "drift_score": 0.08738277654299986,
         "drift_detected": false
       },
       "D15": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.04476614926519853,
+        "drift_score": 0.09034958023478315,
         "drift_detected": false
       },
       "D2": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.03047251492409947,
+        "drift_score": 0.07752486946869155,
         "drift_detected": false
       },
       "D3": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.024439446723241515,
+        "drift_score": 0.037824753652830265,
         "drift_detected": false
       },
       "D4": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.03092914789894623,
+        "drift_score": 0.08809693811768607,
         "drift_detected": false
       },
       "D5": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.030957755514162875,
+        "drift_score": 0.024336670280126566,
         "drift_detected": false
       },
       "D6": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11342922504118318,
-        "drift_detected": true
+        "drift_score": 0.0452789657220167,
+        "drift_detected": false
       },
       "D7": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.1748728737782477,
-        "drift_detected": true
+        "drift_score": 0.03569483508437431,
+        "drift_detected": false
       },
       "D8": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.1985821275063748,
-        "drift_detected": true
+        "drift_score": 0.07908137672137257,
+        "drift_detected": false
       },
       "D9": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.11544978181459062,
-        "drift_detected": true
+        "drift_score": 0.020444229484394397,
+        "drift_detected": false
       },
       "M1_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.06999866912881947,
+        "drift_score": 0.05582147316746169,
         "drift_detected": false
       },
       "M2_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.06994240746114522,
+        "drift_score": 0.056230875111966894,
         "drift_detected": false
       },
       "M3_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.06997477491505452,
+        "drift_score": 0.0561882380796739,
         "drift_detected": false
       },
       "M4_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.09003950108069028,
+        "drift_score": 0.04728325819623273,
         "drift_detected": false
       },
       "M5_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.058674828497148834,
+        "drift_score": 0.03755755274083681,
         "drift_detected": false
       },
       "M6_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.09825842856881778,
+        "drift_score": 0.08132027113564008,
         "drift_detected": false
       },
       "M7_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.04685149858403607,
+        "drift_score": 0.041240256751476016,
         "drift_detected": false
       },
       "M8_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.04659052761861115,
+        "drift_score": 0.03830792906009261,
         "drift_detected": false
       },
       "M9_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.04663151558505085,
+        "drift_score": 0.037769641913284455,
         "drift_detected": false
       },
       "P_emaildomain_encoded": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.024737247698071754,
+        "drift_score": 0.047666840901114435,
         "drift_detected": false
       },
       "ProductCD_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.1629340908770397,
-        "drift_detected": true
+        "drift_score": 0.09107805200792256,
+        "drift_detected": false
       },
       "R_emaildomain_encoded": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.06684982045960729,
-        "drift_detected": false
+        "drift_score": 0.20334516603245426,
+        "drift_detected": true
       },
       "TransactionAmt": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.9815523701594198,
-        "drift_detected": true
+        "drift_score": 0.04763331530403607,
+        "drift_detected": false
       },
       "amount_to_past_mean": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.019148988110013258,
+        "drift_score": 0.05551494436319216,
         "drift_detected": false
       },
       "card4_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.050727701515063686,
+        "drift_score": 0.021228141479451384,
         "drift_detected": false
       },
       "card6_encoded": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.07871900752600361,
+        "drift_score": 0.0353641699725842,
         "drift_detected": false
       },
       "device_change_vs_previous": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.5578398280710348,
-        "drift_detected": true
+        "drift_score": 0.08295167903746567,
+        "drift_detected": false
       },
       "is_first_txn_for_uid": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.1432875014141839,
-        "drift_detected": true
+        "drift_score": 0.01777800172693497,
+        "drift_detected": false
       },
       "location_change_vs_previous": {
         "stattest_name": "Jensen-Shannon distance",
@@ -892,45 +4320,633 @@
       },
       "txn_count_last_1h": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.6524581282918557,
+        "drift_score": 0.12706405570473525,
         "drift_detected": true
       },
       "txn_count_last_24h": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 0.8970738743977528,
+        "drift_score": 0.14580080847874372,
         "drift_detected": true
       },
       "uid_is_hub": {
         "stattest_name": "Jensen-Shannon distance",
-        "drift_score": 0.12661048109413667,
+        "drift_score": 0.005939632933587618,
+        "drift_detected": false
+      },
+      "uid_prior_txn_count": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 0.05412102951666239,
+        "drift_detected": false
+      }
+    },
+    "reference_rows": 15000,
+    "current_rows": 15000,
+    "report_name": "recent_window_drift",
+    "trigger_threshold": 0.6,
+    "reference_window": 8,
+    "current_window": 9,
+    "trigger_eligible": true,
+    "synthetic_stress_test": false
+  },
+  "shifted_window_drift": {
+    "drift_share": 1.0,
+    "evidently_drift_share_threshold": 0.5,
+    "dataset_drift": true,
+    "number_of_columns": 52,
+    "number_of_drifted_columns": 52,
+    "drifted_columns": [
+      "C1",
+      "C10",
+      "C11",
+      "C12",
+      "C13",
+      "C14",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "D1",
+      "D10",
+      "D11",
+      "D12",
+      "D13",
+      "D14",
+      "D15",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8",
+      "D9",
+      "M1_encoded",
+      "M2_encoded",
+      "M3_encoded",
+      "M4_encoded",
+      "M5_encoded",
+      "M6_encoded",
+      "M7_encoded",
+      "M8_encoded",
+      "M9_encoded",
+      "P_emaildomain_encoded",
+      "ProductCD_encoded",
+      "R_emaildomain_encoded",
+      "TransactionAmt",
+      "amount_to_past_mean",
+      "card4_encoded",
+      "card6_encoded",
+      "device_change_vs_previous",
+      "is_first_txn_for_uid",
+      "location_change_vs_previous",
+      "txn_count_last_1h",
+      "txn_count_last_24h",
+      "uid_is_hub",
+      "uid_prior_txn_count"
+    ],
+    "drifted_column_details": [
+      {
+        "name": "C1",
+        "tags": []
+      },
+      {
+        "name": "C10",
+        "tags": []
+      },
+      {
+        "name": "C11",
+        "tags": []
+      },
+      {
+        "name": "C12",
+        "tags": []
+      },
+      {
+        "name": "C13",
+        "tags": []
+      },
+      {
+        "name": "C14",
+        "tags": []
+      },
+      {
+        "name": "C2",
+        "tags": []
+      },
+      {
+        "name": "C3",
+        "tags": []
+      },
+      {
+        "name": "C4",
+        "tags": []
+      },
+      {
+        "name": "C5",
+        "tags": []
+      },
+      {
+        "name": "C6",
+        "tags": []
+      },
+      {
+        "name": "C7",
+        "tags": []
+      },
+      {
+        "name": "C8",
+        "tags": []
+      },
+      {
+        "name": "C9",
+        "tags": []
+      },
+      {
+        "name": "D1",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D10",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D11",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D12",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D13",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D14",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D15",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D2",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D3",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D4",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D5",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D6",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D7",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D8",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "D9",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "M1_encoded",
+        "tags": []
+      },
+      {
+        "name": "M2_encoded",
+        "tags": []
+      },
+      {
+        "name": "M3_encoded",
+        "tags": []
+      },
+      {
+        "name": "M4_encoded",
+        "tags": []
+      },
+      {
+        "name": "M5_encoded",
+        "tags": []
+      },
+      {
+        "name": "M6_encoded",
+        "tags": []
+      },
+      {
+        "name": "M7_encoded",
+        "tags": []
+      },
+      {
+        "name": "M8_encoded",
+        "tags": []
+      },
+      {
+        "name": "M9_encoded",
+        "tags": []
+      },
+      {
+        "name": "P_emaildomain_encoded",
+        "tags": []
+      },
+      {
+        "name": "ProductCD_encoded",
+        "tags": []
+      },
+      {
+        "name": "R_emaildomain_encoded",
+        "tags": []
+      },
+      {
+        "name": "TransactionAmt",
+        "tags": []
+      },
+      {
+        "name": "amount_to_past_mean",
+        "tags": []
+      },
+      {
+        "name": "card4_encoded",
+        "tags": []
+      },
+      {
+        "name": "card6_encoded",
+        "tags": []
+      },
+      {
+        "name": "device_change_vs_previous",
+        "tags": []
+      },
+      {
+        "name": "is_first_txn_for_uid",
+        "tags": []
+      },
+      {
+        "name": "location_change_vs_previous",
+        "tags": []
+      },
+      {
+        "name": "txn_count_last_1h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "txn_count_last_24h",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "uid_is_hub",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      },
+      {
+        "name": "uid_prior_txn_count",
+        "tags": [
+          "cumulative_by_construction"
+        ]
+      }
+    ],
+    "test_names": [
+      "Jensen-Shannon distance",
+      "Wasserstein distance (normed)"
+    ],
+    "column_tests": {
+      "C1": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.009211245256022,
+        "drift_detected": true
+      },
+      "C10": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 17.006070808136055,
+        "drift_detected": true
+      },
+      "C11": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 19.904401245160706,
+        "drift_detected": true
+      },
+      "C12": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 24.210938097860588,
+        "drift_detected": true
+      },
+      "C13": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 21.850890697373057,
+        "drift_detected": true
+      },
+      "C14": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.93046393821467,
+        "drift_detected": true
+      },
+      "C2": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 19.478878169433507,
+        "drift_detected": true
+      },
+      "C3": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 118.99056297655802,
+        "drift_detected": true
+      },
+      "C4": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 17.031750137389917,
+        "drift_detected": true
+      },
+      "C5": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 22.058389268075544,
+        "drift_detected": true
+      },
+      "C6": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.4151711263144,
+        "drift_detected": true
+      },
+      "C7": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 23.42187512224823,
+        "drift_detected": true
+      },
+      "C8": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 17.445963064091345,
+        "drift_detected": true
+      },
+      "C9": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 22.45603350165563,
+        "drift_detected": true
+      },
+      "D1": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 21.734163523185913,
+        "drift_detected": true
+      },
+      "D10": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.920341321830406,
+        "drift_detected": true
+      },
+      "D11": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.57719071773573,
+        "drift_detected": true
+      },
+      "D12": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.668979791437334,
+        "drift_detected": true
+      },
+      "D13": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 18.413975791358403,
+        "drift_detected": true
+      },
+      "D14": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 21.715993847160572,
+        "drift_detected": true
+      },
+      "D15": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.67688399501598,
+        "drift_detected": true
+      },
+      "D2": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 21.065936922884976,
+        "drift_detected": true
+      },
+      "D3": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 18.78879674038271,
+        "drift_detected": true
+      },
+      "D4": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.816071988695608,
+        "drift_detected": true
+      },
+      "D5": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 19.24265312974452,
+        "drift_detected": true
+      },
+      "D6": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 20.464004443415092,
+        "drift_detected": true
+      },
+      "D7": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 19.823768995014607,
+        "drift_detected": true
+      },
+      "D8": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 19.564528609757772,
+        "drift_detected": true
+      },
+      "D9": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 61.389631974265,
+        "drift_detected": true
+      },
+      "M1_encoded": {
+        "stattest_name": "Jensen-Shannon distance",
+        "drift_score": 0.8325546111576977,
+        "drift_detected": true
+      },
+      "M2_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 52.80330570372935,
+        "drift_detected": true
+      },
+      "M3_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 44.848168064262495,
+        "drift_detected": true
+      },
+      "M4_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 25.449567949360684,
+        "drift_detected": true
+      },
+      "M5_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 33.11699384739026,
+        "drift_detected": true
+      },
+      "M6_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 23.511991159592103,
+        "drift_detected": true
+      },
+      "M7_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 41.36384223889542,
+        "drift_detected": true
+      },
+      "M8_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 47.34520647090151,
+        "drift_detected": true
+      },
+      "M9_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 71.37893605123203,
+        "drift_detected": true
+      },
+      "P_emaildomain_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 21.982169410571103,
+        "drift_detected": true
+      },
+      "ProductCD_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 40.72192897455247,
+        "drift_detected": true
+      },
+      "R_emaildomain_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 15.595605416932989,
+        "drift_detected": true
+      },
+      "TransactionAmt": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 0.7605710348641731,
+        "drift_detected": true
+      },
+      "amount_to_past_mean": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 12.582602617767693,
+        "drift_detected": true
+      },
+      "card4_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 120.96850184374652,
+        "drift_detected": true
+      },
+      "card6_encoded": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 125.3611688192213,
+        "drift_detected": true
+      },
+      "device_change_vs_previous": {
+        "stattest_name": "Jensen-Shannon distance",
+        "drift_score": 0.5875809931366026,
+        "drift_detected": true
+      },
+      "is_first_txn_for_uid": {
+        "stattest_name": "Jensen-Shannon distance",
+        "drift_score": 0.8325546111576978,
+        "drift_detected": true
+      },
+      "location_change_vs_previous": {
+        "stattest_name": "Jensen-Shannon distance",
+        "drift_score": 0.8325546111576977,
+        "drift_detected": true
+      },
+      "txn_count_last_1h": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 0.16057055568409478,
+        "drift_detected": true
+      },
+      "txn_count_last_24h": {
+        "stattest_name": "Wasserstein distance (normed)",
+        "drift_score": 0.14094078152945225,
+        "drift_detected": true
+      },
+      "uid_is_hub": {
+        "stattest_name": "Jensen-Shannon distance",
+        "drift_score": 0.8325546111576977,
         "drift_detected": true
       },
       "uid_prior_txn_count": {
         "stattest_name": "Wasserstein distance (normed)",
-        "drift_score": 1.4030011741980948,
+        "drift_score": 19.65451856870332,
         "drift_detected": true
       }
     },
-    "reference_rows": 90000,
-    "current_rows": 30000,
-    "report_name": "shifted_test_data_drift",
-    "trigger_threshold": 0.3,
-    "reference_split": "train",
-    "current_split": "deliberately_shifted_test",
+    "reference_rows": 15000,
+    "current_rows": 15000,
+    "report_name": "shifted_window_drift",
+    "trigger_threshold": 0.6,
+    "reference_window": 8,
+    "current_window": 9,
+    "trigger_eligible": false,
+    "synthetic_stress_test": true,
+    "stress_multiplier": 20.0,
     "shifts": {
       "TransactionAmt": 2.5,
       "txn_count_last_1h": 2.0,
       "txn_count_last_24h": 2.0,
-      "device_change_vs_previous": "set to 1"
+      "device_change_vs_previous": "set to 1",
+      "remaining_model_features": "shifted by 20 standard deviations or 20x magnitude"
     }
   },
   "score_drift": {
     "drift_share": 0.0,
-    "evidently_drift_share_threshold": 0.3,
+    "evidently_drift_share_threshold": 0.5,
     "dataset_drift": false,
     "number_of_columns": 1,
     "number_of_drifted_columns": 0,
     "drifted_columns": [],
+    "drifted_column_details": [],
     "test_names": [
       "Wasserstein distance (normed)"
     ],
@@ -944,10 +4960,11 @@
     "reference_rows": 30000,
     "current_rows": 30000,
     "report_name": "score_drift",
-    "trigger_threshold": 0.3,
+    "trigger_threshold": 0.6,
     "reference_split": "validation",
     "current_split": "test",
     "reference_fraud_rate": 0.0172,
-    "current_fraud_rate": 0.03666666666666667
+    "current_fraud_rate": 0.03666666666666667,
+    "trigger_eligible": false
   }
 }
