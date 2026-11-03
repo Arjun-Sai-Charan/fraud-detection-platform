@@ -1,9 +1,9 @@
 {
-  "tracking_uri": "file:./mlruns_local",
+  "tracking_uri": "http://localhost:5000",
   "experiment_name": "fraud_xgboost_phase3",
   "seed": 42,
   "feature_source": "feast_historical",
-  "feature_retrieval_seconds": 7.9301722520031035,
+  "feature_retrieval_seconds": 5.122400130989263,
   "feature_fallback_reason": null,
   "excluded_columns": [
     "event_timestamp",
@@ -593,6 +593,6 @@
     "precision": 0.5152027027027027,
     "recall": 0.5545454545454546
   },
-  "registered_model_version": 2,
-  "registered_model_source": "runs:/a2dd1ee1b00848c1a3a5aa0d361630fa/model"
+  "registered_model_version": 3,
+  "registered_model_source": "runs:/18483e6e95c041e082b324aced1ae357/model"
 }
