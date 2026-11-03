@@ -15,6 +15,7 @@ from feast import FeatureStore
 from mlflow.tracking import MlflowClient
 
 from src.common.config import FEATURE_REPO_DIR, GNN_ARTIFACT_DIR, XGB_ARTIFACT_DIR
+from src.common.model_registry import serving_model_version
 
 
 class FraudScorer:
@@ -78,12 +79,9 @@ class FraudScorer:
         mlflow.set_tracking_uri(self.tracking_uri)
         client = MlflowClient(tracking_uri=self.tracking_uri)
         if self.model_version:
-            version = client.get_model_version(self.model_name, str(self.model_version))
+            version = serving_model_version(client, self.model_name, self.model_version)
         else:
-            versions = client.search_model_versions(f"name='{self.model_name}'")
-            if not versions:
-                raise FileNotFoundError(f"No registered versions found for {self.model_name!r}")
-            version = max(versions, key=lambda item: int(item.version))
+            version = serving_model_version(client, self.model_name)
         uri = f"models:/{self.model_name}/{version.version}"
         model = mlflow.xgboost.load_model(uri)
         threshold_path = Path(client.download_artifacts(version.run_id, "model/serving_threshold.json"))

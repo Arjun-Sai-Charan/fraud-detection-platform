@@ -4,7 +4,7 @@
 
 The model export command copies the registered `fraud-xgb` model plus its threshold and feature-list artifacts to `artifacts/xgb/`. That directory is ignored by Git. The API and Kafka consumer share `FraudScorer`: it reads the feature list, asks Feast's SQLite online store for the requested transaction's feature values, applies the saved XGBoost model and threshold, and returns `xgb_score`, `alert`, `gnn_score`, `final_score`, `ring_id`, and `ring_size`. GNN and ring fields are populated when Phase 5 artifacts are available; otherwise they remain null. The per-call latency covers Feast lookup plus model inference.
 
-The scorer defaults to the exported local files. It can instead load the latest registered model from MLflow with `FRAUD_MODEL_SOURCE=registry` and `MLFLOW_TRACKING_URI` set. `ScoreRepository` stores every score, active alerts, and analyst feedback in `data/serving.db`. Feedback is linked to an existing scored transaction and updates the alert's case status.
+The scorer defaults to the exported local files. It can instead load the `champion` alias from MLflow with `FRAUD_MODEL_SOURCE=registry` and `MLFLOW_TRACKING_URI` set; if no champion alias exists, it uses the newest registered version that is not tagged by the `candidate` alias. Candidate models are not served automatically. `ScoreRepository` stores every score, active alerts, and analyst feedback in `data/serving.db`. Feedback is linked to an existing scored transaction and updates the alert's case status.
 
 To serve directly from a registry instead of exporting local files, run `make serve-registry TRACKING_URI=http://localhost:5000`.
 

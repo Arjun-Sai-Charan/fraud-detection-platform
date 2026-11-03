@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local export-model benchmark gnn serve serve-registry test
+.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local drift retrain retrain-local export-model benchmark gnn serve serve-registry test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --index-strategy unsafe-best-match --python $(VENV)/bin/python -r requirements.txt
@@ -37,6 +37,15 @@ train-gnn:
 
 train-gnn-local:
 	$(VENV)/bin/python -m src.models.train_gnn --tracking-uri file:./mlruns_local
+
+drift:
+	$(VENV)/bin/python -m src.monitoring.drift
+
+retrain:
+	$(VENV)/bin/python -m src.monitoring.retrain --tracking-uri http://localhost:5000 $(RETRAIN_ARGS)
+
+retrain-local:
+	$(VENV)/bin/python -m src.monitoring.retrain --tracking-uri file:./mlruns_local $(RETRAIN_ARGS)
 
 gnn: train-gnn
 

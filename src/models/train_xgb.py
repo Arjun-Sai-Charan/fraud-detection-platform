@@ -173,6 +173,32 @@ def _split_arrays(frame: pd.DataFrame, feature_names: list[str]) -> dict[str, tu
     return splits
 
 
+def _prepare_training_splits(
+    frame: pd.DataFrame,
+    feature_names: list[str],
+    feedback_rows: pd.DataFrame | None = None,
+) -> tuple[dict[str, tuple[pd.DataFrame, np.ndarray, np.ndarray]], bool]:
+    """Append confirmed feedback to train and suppress test evaluation when used."""
+    include_feedback = feedback_rows is not None and not feedback_rows.empty
+    if include_feedback:
+        required_feedback = {"transaction_id", "isFraud", *feature_names}
+        missing_feedback = sorted(required_feedback - set(feedback_rows.columns))
+        if missing_feedback:
+            raise ValueError(f"Feedback training rows missing required columns: {missing_feedback}")
+        labels = pd.to_numeric(feedback_rows["isFraud"], errors="raise")
+        if not set(labels.unique()).issubset({0, 1}):
+            raise ValueError("Feedback labels must be binary 0/1")
+        feedback_frame = feedback_rows.copy()
+        feedback_frame["split"] = "train"
+        frame = pd.concat([frame, feedback_frame], ignore_index=True, sort=False)
+    splits = _split_arrays(frame, feature_names)
+    if include_feedback:
+        # Feedback rows are from the replayed test window, so that window is no
+        # longer an independent holdout and must not be used for evaluation.
+        splits.pop("test", None)
+    return splits, bool(include_feedback)
+
+
 def _classification_metrics(y_true: np.ndarray, scores: np.ndarray) -> dict[str, float]:
     return {
         "pr_auc": float(average_precision_score(y_true, scores)),
@@ -278,19 +304,22 @@ def _log_xgb_run(
     splits: dict[str, tuple[pd.DataFrame, np.ndarray, np.ndarray]],
     base_rates: dict[str, float],
     feature_names: list[str],
+    trigger_reason: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, np.ndarray], str]:
     x_train, y_train, _ = splits["train"]
     x_val, y_val, val_ids = splits["validation"]
     xgb_model = XGBClassifier(**params)
     with mlflow.start_run(run_name=f"xgboost_{name}") as active_run:
         mlflow.set_tags({"model_family": "xgboost", "imbalance_variant": name})
+        if trigger_reason:
+            mlflow.set_tag("retraining_trigger_reason", trigger_reason)
         mlflow.log_params({
             **params,
             "seed": SEED,
             "train_rows": len(y_train),
             "feature_count": len(feature_names),
             "validation_base_rate": base_rates["validation"],
-            "test_base_rate": base_rates["test"],
+            **({"test_base_rate": base_rates["test"]} if "test" in base_rates else {}),
         })
         xgb_model.fit(
             x_train,
@@ -315,17 +344,21 @@ def _log_xgb_run(
         metrics["validation_confusion_at_serving_threshold"] = _confusion_at_threshold(
             y_val, probabilities["validation"], val_ids, threshold
         )
-        _, y_test, test_ids = splits["test"]
-        metrics["test_confusion_at_serving_threshold"] = _confusion_at_threshold(
-            y_test, probabilities["test"], test_ids, threshold
-        )
-        mlflow.log_metrics({
+        threshold_metrics = {
             "validation_precision_at_serving_threshold": metrics["validation_confusion_at_serving_threshold"]["precision"],
             "validation_recall_at_serving_threshold": metrics["validation_confusion_at_serving_threshold"]["recall"],
-            "test_precision_at_serving_threshold": metrics["test_confusion_at_serving_threshold"]["precision"],
-            "test_recall_at_serving_threshold": metrics["test_confusion_at_serving_threshold"]["recall"],
             "best_iteration": float(xgb_model.best_iteration),
-        })
+        }
+        if "test" in splits:
+            _, y_test, test_ids = splits["test"]
+            metrics["test_confusion_at_serving_threshold"] = _confusion_at_threshold(
+                y_test, probabilities["test"], test_ids, threshold
+            )
+            threshold_metrics.update({
+                "test_precision_at_serving_threshold": metrics["test_confusion_at_serving_threshold"]["precision"],
+                "test_recall_at_serving_threshold": metrics["test_confusion_at_serving_threshold"]["recall"],
+            })
+        mlflow.log_metrics(threshold_metrics)
 
         importance = {
             feature: float(value)
@@ -366,7 +399,16 @@ def _log_logistic_baseline(splits: dict[str, tuple[pd.DataFrame, np.ndarray, np.
     return measured, probabilities
 
 
-def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEATURES_PATH) -> dict[str, Any]:
+def train(
+    tracking_uri: str = "http://localhost:5000",
+    features_path: Path = FEATURES_PATH,
+    *,
+    trigger_reason: str | None = None,
+    feedback_rows: pd.DataFrame | None = None,
+    output_metrics_path: Path | None = METRICS_PATH,
+    pr_curve_path: Path = PR_CURVE_PATH,
+    register_alias: str | None = None,
+) -> dict[str, Any]:
     np.random.seed(SEED)
     mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment(TRACKING_EXPERIMENT)
@@ -374,7 +416,7 @@ def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEA
     frame, feature_source, fallback_reason, retrieval_seconds = load_training_data(features_path)
     feature_names = get_model_features(frame)
     _validate_model_feature_names(feature_names, _feast_online_field_names())
-    splits = _split_arrays(frame, feature_names)
+    splits, feedback_included = _prepare_training_splits(frame, feature_names, feedback_rows)
     base_rates = {name: float(np.mean(y)) for name, (_, y, _) in splits.items()}
     train_negatives = int(np.sum(splits["train"][1] == 0))
     train_positives = int(np.sum(splits["train"][1] == 1))
@@ -411,43 +453,56 @@ def train(tracking_uri: str = "http://localhost:5000", features_path: Path = FEA
         run_ids = {}
         for name, weight in (("unweighted", 1.0), ("weighted", scale_pos_weight)):
             params = _xgb_params(weight)
-            run_metrics, run_predictions, run_id = _log_xgb_run(name, params, splits, base_rates, feature_names)
+            run_metrics, run_predictions, run_id = _log_xgb_run(
+                name, params, splits, base_rates, feature_names, trigger_reason=trigger_reason
+            )
             results["xgboost_runs"][name] = run_metrics
-            predictions[name] = {split: run_predictions[split] for split in ("validation", "test")}
+            predictions[name] = {split: run_predictions[split] for split in ("validation", "test") if split in run_predictions}
             run_ids[name] = run_id
 
     best_name = max(results["xgboost_runs"], key=lambda name: results["xgboost_runs"][name]["splits"]["validation"]["pr_auc"])
     best_model_run_id = run_ids[best_name]
     best_run = results["xgboost_runs"][best_name]
     _, y_val, val_ids = splits["validation"]
-    _, y_test, test_ids = splits["test"]
     serving_threshold = best_run["serving_threshold"]
     results["selected_model"] = best_name
     results["registered_model_name"] = MODEL_NAME
     results["serving_threshold"] = serving_threshold
     results["validation_confusion_at_serving_threshold"] = best_run["validation_confusion_at_serving_threshold"]
-    results["test_confusion_at_serving_threshold"] = best_run["test_confusion_at_serving_threshold"]
+    if "test_confusion_at_serving_threshold" in best_run:
+        results["test_confusion_at_serving_threshold"] = best_run["test_confusion_at_serving_threshold"]
+    if feedback_included:
+        results["feedback_training_rows"] = len(feedback_rows)
+        results["evaluation_scope"] = "validation_only_feedback_rows_included_from_test_replay"
 
     _plot_pr_curves(
         predictions,
-        {name: splits[name][1] for name in ("validation", "test")},
-        {name: base_rates[name] for name in ("validation", "test")},
-        PR_CURVE_PATH,
+        {name: splits[name][1] for name in ("validation", "test") if name in splits},
+        {name: base_rates[name] for name in ("validation", "test") if name in base_rates},
+        pr_curve_path,
     )
     with mlflow.start_run(run_id=best_model_run_id):
         mlflow.set_tag("registered_best_model", "true")
-        mlflow.log_artifact(str(PR_CURVE_PATH), artifact_path="evaluation")
+        if trigger_reason:
+            mlflow.set_tag("retraining_trigger_reason", trigger_reason)
+        mlflow.log_artifact(str(pr_curve_path), artifact_path="evaluation")
         mlflow.log_dict(results, "phase3_metrics.json")
     for run_id in run_ids.values():
         with mlflow.start_run(run_id=run_id):
-            mlflow.log_artifact(str(PR_CURVE_PATH), artifact_path="evaluation")
+            mlflow.log_artifact(str(pr_curve_path), artifact_path="evaluation")
 
     model_uri = f"runs:/{best_model_run_id}/model"
     registered = mlflow.register_model(model_uri, MODEL_NAME)
     results["registered_model_version"] = int(registered.version)
     results["registered_model_source"] = model_uri
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    METRICS_PATH.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
+    if register_alias:
+        mlflow.tracking.MlflowClient().set_registered_model_alias(
+            MODEL_NAME, register_alias, str(registered.version)
+        )
+        results["registered_model_alias"] = register_alias
+    if output_metrics_path is not None:
+        output_metrics_path.parent.mkdir(parents=True, exist_ok=True)
+        output_metrics_path.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     return results
 
 

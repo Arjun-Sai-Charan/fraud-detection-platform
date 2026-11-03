@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-11-02T18:30:54.294922+00:00",
+  "tracking_uri": "file:./mlruns_local",
+  "drift_report": "/home/arjun/fraud-platform/results/drift/test_data_drift.json",
+  "drift_share": 0.40384615384615385,
+  "drift_share_threshold": 0.3,
+  "feedback_count": 0,
+  "feedback_threshold": 25,
+  "triggered": true,
+  "trigger_reasons": [
+    "data_drift_share=0.403846>0.300000"
+  ],
+  "dry_run": false,
+  "include_feedback_requested": false,
+  "model_name": "fraud-xgb",
+  "registered_model_alias": "candidate",
+  "status": "candidate_registered",
+  "confirmed_feedback_rows_used": 0,
+  "registered_model_version": 3,
+  "selected_model": "unweighted",
+  "validation_pr_auc": 0.41721872734555976,
+  "evaluation_scope": "validation_and_test"
+}

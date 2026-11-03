@@ -23,4 +23,6 @@ TRAIN_FRACTION = 0.60
 VALIDATION_FRACTION = 0.20
 RANDOM_SEED = 42
 ALERT_THRESHOLD = 0.5  # Replaced by a validation-selected value during model training.
+DRIFT_SHARE_THRESHOLD = float(os.getenv("FRAUD_DRIFT_SHARE_THRESHOLD", "0.3"))
+MIN_ANALYST_FEEDBACK = int(os.getenv("FRAUD_MIN_ANALYST_FEEDBACK", "25"))
 

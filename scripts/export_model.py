@@ -11,15 +11,11 @@ import mlflow
 from mlflow.tracking import MlflowClient
 
 from src.common.config import XGB_ARTIFACT_DIR
+from src.common.model_registry import serving_model_version
 
 
 def latest_model_version(client: MlflowClient, model_name: str, requested_version: str | None = None):
-    if requested_version:
-        return client.get_model_version(model_name, str(requested_version))
-    versions = client.search_model_versions(f"name='{model_name}'")
-    if not versions:
-        raise ValueError(f"No registered versions found for model {model_name!r}")
-    return max(versions, key=lambda item: int(item.version))
+    return serving_model_version(client, model_name, requested_version)
 
 
 def export_registered_model(

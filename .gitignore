@@ -16,6 +16,10 @@ results/*
 !results/*.csv
 !results/*.html
 !results/.gitkeep
+results/drift/*.html
+!results/drift/
+!results/drift/*.json
+!results/drift/score_drift.html
 mlruns/
 mlruns_local/
 mlartifacts/

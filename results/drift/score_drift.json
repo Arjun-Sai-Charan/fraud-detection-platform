@@ -1,0 +1,26 @@
+{
+  "drift_share": 0.0,
+  "evidently_drift_share_threshold": 0.3,
+  "dataset_drift": false,
+  "number_of_columns": 1,
+  "number_of_drifted_columns": 0,
+  "drifted_columns": [],
+  "test_names": [
+    "Wasserstein distance (normed)"
+  ],
+  "column_tests": {
+    "xgb_score": {
+      "stattest_name": "Wasserstein distance (normed)",
+      "drift_score": 0.07634794585196936,
+      "drift_detected": false
+    }
+  },
+  "reference_rows": 30000,
+  "current_rows": 30000,
+  "report_name": "score_drift",
+  "trigger_threshold": 0.3,
+  "reference_split": "validation",
+  "current_split": "test",
+  "reference_fraud_rate": 0.0172,
+  "current_fraud_rate": 0.03666666666666667
+}
