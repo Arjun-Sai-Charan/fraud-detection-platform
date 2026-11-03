@@ -1,0 +1,20 @@
+{
+  "split": "test",
+  "flag_rule": "blend score above saved validation top-3% threshold, including saved transaction-id tie rule",
+  "blend_weight_xgb": 1.0,
+  "threshold": 0.1192927360534668,
+  "flagged_transaction_count": 1184,
+  "comparison": {
+    "inside_multi_transaction_rings": {
+      "transaction_count": 893,
+      "fraud_count": 438,
+      "fraud_rate": 0.49048152295632697
+    },
+    "outside_multi_transaction_rings": {
+      "transaction_count": 291,
+      "fraud_count": 172,
+      "fraud_rate": 0.5910652920962199
+    }
+  },
+  "interpretation_note": "Uses ground-truth test labels offline; labels are unavailable during live scoring."
+}

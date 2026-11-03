@@ -2,7 +2,7 @@ SHELL := /bin/bash
 UV ?= uv
 VENV ?= .venv
 
-.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local drift retrain retrain-local export-model benchmark gnn serve serve-registry test
+.PHONY: setup data features feature-store train train-xgb train-xgb-local train-gnn train-gnn-local drift retrain retrain-local export-model benchmark ring-precision demo-data dashboard gnn serve serve-registry test
 setup:
 	$(UV) venv --python 3.11 $(VENV)
 	$(UV) pip install --index-strategy unsafe-best-match --python $(VENV)/bin/python -r requirements.txt
@@ -57,6 +57,15 @@ serve-registry:
 
 benchmark:
 	$(VENV)/bin/python -m scripts.benchmark_latency
+
+ring-precision:
+	$(VENV)/bin/python -m scripts.ring_precision
+
+demo-data:
+	$(VENV)/bin/python -m scripts.seed_demo_alerts
+
+dashboard:
+	$(VENV)/bin/streamlit run src/dashboard/app.py --server.port 8501
 
 test:
 	$(VENV)/bin/python -m pytest -q

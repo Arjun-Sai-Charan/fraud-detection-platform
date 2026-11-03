@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 import numpy as np
+import pandas as pd
 
 from src.common.config import SERVING_DB_PATH
 
@@ -137,6 +138,63 @@ class ScoreRepository:
         with self._connect() as connection:
             rows = connection.execute(query, parameters).fetchall()
         return [dict(row) for row in rows]
+
+    def get_transaction(self, transaction_id: int) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT s.*, a.status,
+                          (SELECT f.analyst_label FROM feedback f
+                           WHERE f.transaction_id=s.transaction_id ORDER BY f.id DESC LIMIT 1) AS analyst_label,
+                          (SELECT f.case_status FROM feedback f
+                           WHERE f.transaction_id=s.transaction_id ORDER BY f.id DESC LIMIT 1) AS case_status
+                   FROM scores s LEFT JOIN alerts a ON a.transaction_id=s.transaction_id
+                   WHERE s.transaction_id=?""",
+                (int(transaction_id),),
+            ).fetchone()
+        return dict(row) if row is not None else None
+
+    def list_rings(
+        self,
+        ring_rows: list[dict[str, Any]],
+        amounts: dict[int, float],
+    ) -> list[dict[str, Any]]:
+        grouped: dict[str, dict[str, Any]] = {}
+        for row in ring_rows:
+            ring_id = row.get("ring_id")
+            if ring_id is None or pd.isna(ring_id):
+                continue
+            transaction_id = int(row["transaction_id"])
+            size = row.get("ring_size")
+            size = 0 if size is None or pd.isna(size) else int(size)
+            ring = grouped.setdefault(
+                str(ring_id),
+                {
+                    "ring_id": str(ring_id),
+                    "ring_size": size,
+                    "transaction_ids": [],
+                    "total_amount": 0.0,
+                },
+            )
+            ring["transaction_ids"].append(transaction_id)
+            ring["total_amount"] += float(amounts.get(transaction_id, 0.0))
+
+        with self._connect() as connection:
+            alerts = {
+                int(row["transaction_id"]): str(row["status"])
+                for row in connection.execute("SELECT transaction_id,status FROM alerts").fetchall()
+            }
+        result = []
+        for ring in grouped.values():
+            statuses: dict[str, int] = {}
+            alert_count = 0
+            for transaction_id in ring["transaction_ids"]:
+                status = alerts.get(transaction_id)
+                if status is not None:
+                    alert_count += 1
+                    statuses[status] = statuses.get(status, 0) + 1
+            ring.update({"alert_count": alert_count, "case_statuses": statuses})
+            result.append(ring)
+        return sorted(result, key=lambda row: (-row["alert_count"], row["ring_id"]))
 
     def metrics_lite(self) -> dict[str, Any]:
         with self._connect() as connection:

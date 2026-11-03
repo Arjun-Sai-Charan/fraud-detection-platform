@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from feast import FeatureStore
 from mlflow.tracking import MlflowClient
+from xgboost import DMatrix
 
 from src.common.config import FEATURE_REPO_DIR, GNN_ARTIFACT_DIR, XGB_ARTIFACT_DIR
 from src.common.model_registry import serving_model_version
@@ -183,6 +184,32 @@ class FraudScorer:
             "ring_size": ring_size,
             "latency_ms": float(latency_ms),
         }
+
+    def feature_contributions(self, transaction_id: int, limit: int = 5) -> list[dict[str, Any]]:
+        """Return the largest signed XGBoost SHAP contributions for one online row."""
+        self._ensure_ready()
+        assert self.feature_list is not None and self.model is not None
+        refs = [f"transaction_features:{name}" for name in self.feature_list]
+        online = self.feature_store.get_online_features(
+            features=refs,
+            entity_rows=[{"transaction_id": int(transaction_id)}],
+            full_feature_names=True,
+        )
+        values = self._online_feature_values(online, self.feature_list)
+        row = pd.DataFrame([[values[name] for name in self.feature_list]], columns=self.feature_list)
+        row = row.apply(pd.to_numeric, errors="coerce").astype(np.float64)
+        contributions = self.model.get_booster().predict(
+            DMatrix(row, feature_names=self.feature_list), pred_contribs=True
+        )[0]
+        ranked = sorted(
+            zip(self.feature_list, contributions[:-1]),
+            key=lambda item: abs(float(item[1])),
+            reverse=True,
+        )[: max(0, int(limit))]
+        return [
+            {"feature": name, "contribution": float(value)}
+            for name, value in ranked
+        ]
 
 
 def scorer_from_environment() -> FraudScorer:
